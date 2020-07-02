@@ -1,3 +1,16 @@
+# local env files
+.env.local
+.env.*.local
+
+# Editor directories and files
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
 target/
 .classpath
 .project
@@ -61,8 +74,10 @@ proguard/
 # Vuejs #
 node_modules/
 dist/
-npm-debug.log
-yarn-error.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-error.log*
+yarn-debug.log*
 
 # dependencies
 node_modules/
