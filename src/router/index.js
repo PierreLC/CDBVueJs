@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
+import Dashboard from '../views/Dashboard.vue'
+import Authentication from '../views/Authentication.vue'
 
 Vue.use(VueRouter)
 
@@ -8,14 +9,12 @@ const routes = [
   {
     path: '/',
     name: 'Dashboard',
-    component: Home
+    component: Dashboard
   },
   {
-    path: '/cocktail',
-    name: 'Cocktail',
-    component: function () {
-      return import('../views/Cocktail.vue')
-    }
+    path: '/authentication',
+    name: 'Authentication',
+    component: Authentication
   },
 ]
 
