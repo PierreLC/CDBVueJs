@@ -1,11 +1,17 @@
 <template>
-  <div>CompanyDetails</div>
+  <v-expansion-panels>
+    <v-expansion-panel>
+      <v-expansion-panel-header></v-expansion-panel-header>
+      <v-expansion-panel-content>azeaz</v-expansion-panel-content>
+    </v-expansion-panel>
+  </v-expansion-panels>
 </template>
 
 <script>
 export default {
   name: "CompanyDetails",
-  props: {},
+  props: {
+  },
   methods: {}
 };
 </script>
