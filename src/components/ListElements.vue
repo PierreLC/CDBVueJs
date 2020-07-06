@@ -1,9 +1,21 @@
 <template>
   <div>
     <v-card class="searchCard">
-      <v-overflow-btn class="my-2" :items="dropdown_categories" label="Catégories"></v-overflow-btn>
-      <v-text-field v-model="message1" label="Search" clearable></v-text-field>
-      <v-overflow-btn class="my-2" :items="dropdown_numberelement" label="Nombre d'éléments"></v-overflow-btn>
+       <v-row justify="center" align="center">
+        <v-select :items="dropdown_categories" filled label="Catégories" dense v-model="categories"></v-select>
+        <v-text-field v-model="searchfilter" label="Recherche" clearable dense></v-text-field>
+        <v-select :items="dropdown_numberelement" filled label="Nombre d'éléments" dense></v-select>
+      </v-row>
+      <v-row justify="center" align="center" v-if="categories = 'Ordinateur'">
+          <v-chip draggable>Nom</v-chip>
+          <v-chip draggable>Date de mise en service</v-chip>
+          <v-chip draggable>Date de fin de serivce</v-chip>
+          <v-chip draggable>Société</v-chip>
+        </v-row>
+        <v-row justify="center" align="center" v-if="categories = 'Société'">
+          <v-chip draggable>Nom</v-chip>
+        </v-row>
+      <v-btn color="primary" @click="search">Rechercher</v-btn>
     </v-card>
     <div v-for="(element, i) in lister" :key="i" class="elementsPanel">
       <div v-for="(elem, o) in element" :key="o">
@@ -45,11 +57,17 @@ export default {
     sheet: false,
     elements: Object,
     dropdown_categories: ["Ordinateur" ,"Société"],
-    dropdown_numberelement: ["10", "50", "100"]
+    dropdown_numberelement: ["10", "50", "100"],
+    searchfilter: "",
+    categories: "",
+    numberelement: "",
   }),
   components: { EditElement },
   props: {},
-  methods: {},
+  methods: {
+    search() {
+    }
+  },
   computed: {
     lister() {
       return data;
