@@ -6,7 +6,7 @@ export default class UserApi {
         this.axios = axiosInstance
     }
 
-    toto(user, password) {
+    login(user, password) {
         return this.axios.post('/login',{
             name: user,
             password: password

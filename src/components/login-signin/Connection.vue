@@ -7,11 +7,14 @@
             <v-card class="elevation-12">
               <v-toolbar color="primary" dark flat>
                 <v-toolbar-title>Login form</v-toolbar-title>
-                <v-spacer></v-spacer>
+
                 <v-tooltip bottom>
                   <span>Source</span>
                 </v-tooltip>
               </v-toolbar>
+              <v-alert type="error" v-show="visible">
+                I'm an error alert.
+              </v-alert>
               <v-card-text>
                 <v-form>
                   <v-text-field
@@ -49,16 +52,17 @@ import { userApi } from "../../api/user_api";
 
 export default {
   name: "Connection",
+  visible: false,
   username: "",
   userpassword: "",
   props: {},
   methods: {
     loginMethod() {
-      userApi.toto(this.username, this.userpassword).then((response) => {
-        let token = 'token';
+      userApi.login(this.username, this.userpassword).then((response) => {
+        let token = "token";
+        console.log(response.data)
         sessionStorage.setItem(token, response.data);
       });
-
     },
   },
 };
