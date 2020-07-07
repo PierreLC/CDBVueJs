@@ -34,8 +34,11 @@
                     <v-col cols="12" sm="6" md="4">
                       <v-autocomplete
                         label="Companies*"
+                        v-model="id"
                         :items="companies"
+                        item-value="id"
                         item-text="name"
+
                       >
                       </v-autocomplete>
                     </v-col>
@@ -43,8 +46,8 @@
                       <v-container>
                         <v-row>
                           <v-menu
-                            ref="menu1"
-                            v-model="menu1"
+                            ref="menu"
+                            v-model="menu"
                             :close-on-content-click="false"
                             transition="scale-transition"
                             offset-y
@@ -62,9 +65,9 @@
                               ></v-text-field>
                             </template>
                             <v-date-picker
-                              v-model="computer.introducedDate"
+                              v-model="computer.introduced"
                               no-title
-                              @input="menu1 = false"
+                              @input="menu = false"
                             ></v-date-picker>
                           </v-menu>
                         </v-row>
@@ -85,7 +88,7 @@
                             <template v-slot:activator="{ on, attrs }">
                               <v-text-field
                                 v-model="dateFormatted"
-                                label="Introduced date"
+                                label="Discontinued date"
                                 hint="MM/DD/YYYY format"
                                 v-bind="attrs"
                                 @blur="date = parseDate(dateFormatted)"
@@ -93,7 +96,7 @@
                               ></v-text-field>
                             </template>
                             <v-date-picker
-                              v-model="computer.discontinuedDate"
+                              v-model="computer.discontinued"
                               no-title
                               @input="menu1 = false"
                             ></v-date-picker>
@@ -185,17 +188,13 @@ export default {
       { locale: "en", icon: englishFlag, title: "English" },
     ],
     companies: [
-      { name: "albatros" },
-      { name: "albanie" },
-      { name: "albator" },
-      { name: "albatar" },
-      { name: "cortexLesPyramides" },
     ],
-    company: {},
+    company: { },
+    id: 0,
     computer: {
       name: "",
-      introducedDate: "",
-      discontinuedDate: "",
+      introduced: "",
+      discontinue: "",
       company: "",
     },
     date: new Date().toISOString().substr(0, 10),
@@ -212,14 +211,14 @@ export default {
     },
 
     addElement() {
-      console.log(this.computer.name);
-      computerApi.create();
+      var company = { id:this.id, name: ""};
+      const computer = { name: this.computer.name, introduced: this.computer.introduced, discontinued: this.computer.discontinued, company: company};
+      computerApi.create(computer);
     },
 
     findCompanies() {
       companyApi.findAll().then((response) => {
         this.companies = response.data;
-        console.log(this.companies);
       });
     },
 
@@ -242,7 +241,7 @@ export default {
     computedDateFormatted() {
       return this.formatDate(this.date);
     },
-    options: () => this.companies.name,
+    options: () => this.name,
   },
 
   mounted() {

@@ -6,9 +6,8 @@ export default class CompanyApi {
     }
 
     findAll() {
-        return this.axios.get('/companies',{ headers: {"authorization": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJldGllbm5lIiwiZXhwIjoxNTk0MDgzOTEyLCJpYXQiOjE1OTQwNDc5MTJ9.wclKZpSS63w4nKG8kDMVPaiv3nFIll9caumIcVGVEwW28luaQgYDhiUZlkKS7zOJoD9rjquld8o355qaQXseKA"}});
+        return this.axios.get('/companies',{ headers: {"authorization": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJldGllbm5lIiwiZXhwIjoxNTk0MTQ0MzYyLCJpYXQiOjE1OTQxMDgzNjJ9.cLukJIOupcFC6vmiVldBRZVjdw8vnziaxaae82OCvUEgbKulFzwlAkSiCFmaCIqDl62LQVgASvdX6yWC726IEw"}});
     }
-    
 }
 
 export const companyApi = new CompanyApi(axios)

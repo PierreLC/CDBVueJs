@@ -6,11 +6,11 @@ export default class ComputerApi {
     }
 
     findAll() {
-        return this.axios.get('/computers',{ headers: {"authorization": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJldGllbm5lIiwiZXhwIjoxNTk0MDgzOTEyLCJpYXQiOjE1OTQwNDc5MTJ9.wclKZpSS63w4nKG8kDMVPaiv3nFIll9caumIcVGVEwW28luaQgYDhiUZlkKS7zOJoD9rjquld8o355qaQXseKA"}})
+        return this.axios.get('/computers',{ headers: {"authorization": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJldGllbm5lIiwiZXhwIjoxNTk0MTQ0MzYyLCJpYXQiOjE1OTQxMDgzNjJ9.cLukJIOupcFC6vmiVldBRZVjdw8vnziaxaae82OCvUEgbKulFzwlAkSiCFmaCIqDl62LQVgASvdX6yWC726IEw"}})
     }
 
-    create(computerLabel) {
-        return this.axios.post('/computers', computerLabel, { headers: {"Content-Type": "application/json"}})
+    create(computerDTO) {
+        return this.axios.post('/computers', computerDTO, { headers: {"Content-Type": "application/json", "authorization": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJldGllbm5lIiwiZXhwIjoxNTk0MTQ0MzYyLCJpYXQiOjE1OTQxMDgzNjJ9.cLukJIOupcFC6vmiVldBRZVjdw8vnziaxaae82OCvUEgbKulFzwlAkSiCFmaCIqDl62LQVgASvdX6yWC726IEw"}})
     }
     
     delete(id) {
