@@ -1,10 +1,16 @@
 <template>
-  <div>Authentication</div>
+  <div>
+    <Header />
+    <Connection />
+  </div>
 </template>
 
 <script>
+import Header from "@/components/Header.vue";
+import Connection from '@/components/login-signin/Connection.vue';
+
 export default {
   name: "Authentication",
-  components: {}
+  components: { Header, Connection },
 };
 </script>
