@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-card color="grey lighten-4" flat height="200px" tile>
+    <v-card color="grey lighten-4" flat tile>
       <v-toolbar prominent extended>
         <router-link to="/">
           <v-btn class="dashboard">
@@ -14,12 +14,11 @@
           <v-dialog v-model="dialog" persistent>
             <template v-slot:activator="{ on, attrs }">
               <v-btn outlined color="indigo" dark v-bind="attrs" v-on="on">
-                <v-icon>mdi-plus</v-icon>
-                Add Element
+                <v-icon>mdi-plus</v-icon>Add Element
               </v-btn>
             </template>
             <v-card>
-              <v-card-title> </v-card-title>
+              <v-card-title></v-card-title>
               <v-card-text>
                 <v-container>
                   <v-row>
@@ -38,9 +37,7 @@
                         :items="companies"
                         item-value="id"
                         item-text="name"
-
-                      >
-                      </v-autocomplete>
+                      ></v-autocomplete>
                     </v-col>
                     <v-col cols="12" sm="6">
                       <v-container>
@@ -110,12 +107,8 @@
               </v-card-text>
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" text @click="dialog = false"
-                  >Close</v-btn
-                >
-                <v-btn color="blue darken-1" text @click="addElement()">
-                  Save
-                </v-btn>
+                <v-btn color="blue darken-1" text @click="dialog = false">Close</v-btn>
+                <v-btn color="blue darken-1" text @click="addElement()">Save</v-btn>
               </v-card-actions>
             </v-card>
           </v-dialog>
@@ -127,13 +120,9 @@
               <template v-slot:activator="{ on: menu, attrs }">
                 <v-tooltip bottom>
                   <template v-slot:activator="{ on: tooltip }">
-                    <v-btn
-                      v-bind="attrs"
-                      v-on="{ ...tooltip, ...menu }"
-                      :value="1"
-                    >
+                    <v-btn v-bind="attrs" v-on="{ ...tooltip, ...menu }" :value="1">
                       <!-- <span v-if="this.language === 'fr'">Français</span>
-                      <span v-if="this.language === 'en'">English</span> -->
+                      <span v-if="this.language === 'en'">English</span>-->
                       <v-icon>mdi-earth</v-icon>
                     </v-btn>
                   </template>
@@ -181,26 +170,25 @@ import { englishFlag } from "@/assets/images/en-flag.png";
 export default {
   name: "Header",
 
-  data: (vm) => ({
+  data: vm => ({
     language: "fr",
     languages: [
       { locale: "fr", icon: frenchFlag, title: "Français" },
-      { locale: "en", icon: englishFlag, title: "English" },
+      { locale: "en", icon: englishFlag, title: "English" }
     ],
-    companies: [
-    ],
-    company: { },
+    companies: [],
+    company: {},
     id: 0,
     computer: {
       name: "",
       introduced: "",
       discontinue: "",
-      company: "",
+      company: ""
     },
     date: new Date().toISOString().substr(0, 10),
     dateFormatted: vm.formatDate(new Date().toISOString().substr(0, 10)),
-    menu1: false,
-    dialog: false,
+    menu: false,
+    dialog: false
   }),
 
   props: {},
@@ -211,13 +199,20 @@ export default {
     },
 
     addElement() {
-      var company = { id:this.id, name: ""};
-      const computer = { name: this.computer.name, introduced: this.computer.introduced, discontinued: this.computer.discontinued, company: company};
+      var company = { id: this.id, name: "" };
+      const computer = {
+        name: this.computer.name,
+        introduced: this.computer.introduced,
+        discontinued: this.computer.discontinued,
+        company: company
+      };
       computerApi.create(computer);
     },
 
     findCompanies() {
-      companyApi.findAll().then((response) => {
+      var token = sessionStorage.getItem("token");
+
+      companyApi.findAll(token).then(response => {
         this.companies = response.data;
       });
     },
@@ -234,19 +229,19 @@ export default {
 
       const [month, day, year] = date.split("/");
       return `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
-    },
+    }
   },
 
   computed: {
     computedDateFormatted() {
       return this.formatDate(this.date);
     },
-    options: () => this.name,
+    options: () => this.name
   },
 
   mounted() {
     this.findCompanies();
-  },
+  }
 };
 </script>
 
@@ -257,7 +252,7 @@ export default {
 }
 
 .LBC {
-  position: relative;
+  position: absolute;
   background-color: #3b5998;
   left: 0;
   right: 0;

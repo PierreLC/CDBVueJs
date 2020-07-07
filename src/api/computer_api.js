@@ -1,21 +1,41 @@
-import { axios } from './index'
+import { axios } from "./index";
 
 export default class ComputerApi {
-    constructor(axiosInstance) {
-        this.axios = axiosInstance
-    }
+  constructor(axiosInstance) {
+    this.axios = axiosInstance;
+  }
 
-    findAll() {
-        return this.axios.get('/computers',{ headers: {"authorization": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJldGllbm5lIiwiZXhwIjoxNTk0MTQ0MzYyLCJpYXQiOjE1OTQxMDgzNjJ9.cLukJIOupcFC6vmiVldBRZVjdw8vnziaxaae82OCvUEgbKulFzwlAkSiCFmaCIqDl62LQVgASvdX6yWC726IEw"}})
-    }
+  findAll(token, computerSreach) {
+    return this.axios.get(
+     // "/computers?pageIterator=" +
+      //  computerSreach.pageIterator +
+        //"&taillePage=" +
+        //computerSreach.taillePage +
+        "/computers?search=" +
+        computerSreach.search ,
+        //"&order=" +
+        //computerSreach.order,
+      {
+        headers: {
+          authorization: "Bearer " + token,
+        },
+      }
+    );
+  }
 
-    create(computerDTO) {
-        return this.axios.post('/computers', computerDTO, { headers: {"Content-Type": "application/json", "authorization": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJldGllbm5lIiwiZXhwIjoxNTk0MTQ0MzYyLCJpYXQiOjE1OTQxMDgzNjJ9.cLukJIOupcFC6vmiVldBRZVjdw8vnziaxaae82OCvUEgbKulFzwlAkSiCFmaCIqDl62LQVgASvdX6yWC726IEw"}})
-    }
-    
-    delete(id) {
-        return this.axios.delete('/computers/' + id)
-    }
+  create(computerDTO) {
+    return this.axios.post("/computers", computerDTO, {
+      headers: {
+        "Content-Type": "application/json",
+        authorization:
+          "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJldGllbm5lIiwiZXhwIjoxNTk0MTQ0MzYyLCJpYXQiOjE1OTQxMDgzNjJ9.cLukJIOupcFC6vmiVldBRZVjdw8vnziaxaae82OCvUEgbKulFzwlAkSiCFmaCIqDl62LQVgASvdX6yWC726IEw",
+      },
+    });
+  }
+
+  delete(id) {
+    return this.axios.delete("/computers/" + id);
+  }
 }
 
-export const computerApi = new ComputerApi(axios)
+export const computerApi = new ComputerApi(axios);

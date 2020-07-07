@@ -10,12 +10,12 @@
           v-model="category"
           class="topcardElements"
         ></v-select>
-        <v-text-field v-model="searchfilter" label="Recherche" clearable class="searchBar"></v-text-field>
+        <v-text-field v-model="computerSeach.search" @keydown.enter="search" label="Recherche" clearable class="searchBar"></v-text-field>
         <v-select
           :items="dropdown_numberelement"
           filled
           label="Nombre d'éléments"
-          v-model="numberelement"
+          v-model="computerSeach.taillePage"
           class="topcardElements"
         ></v-select>
       </v-row>
@@ -36,38 +36,41 @@
         <v-btn color="primary" @click="search" class="searchButton">Rechercher</v-btn>
       </div>
     </v-card>
-
-    <div v-for="(element, i) in lister" :key="i" class="elementsPanel">
-      <div v-for="(elem, o) in element" :key="o">
-        <ComputerDetails
-          v-if="responceStatus === '200' && responceUrl === '\\computer'"
-          v-bind:computer="elem"
-        />
-        <CompanyDetails
-          v-else-if="responceStatus === '200' && responceUrl === '\\company'"
-          v-bind:company="elem"
-        />
-        <div v-else>Error</div>
+    <div v-if="responceStatus === 200" class="elementsPanel">
+      <div v-if="isUrlInclude('/computers')">
+        <ComputerDetails v-for="(element, i) in elements" :key="i" v-bind:computer="element" />
       </div>
+      <div v-else-if="isUrlInclude('/companies')">
+        <CompanyDetails v-for="(element, i) in elements" :key="i" v-bind:company="element" />
+      </div>
+      <div v-else>Error Nothing Found</div>
+    </div>
+    <div v-else class="spinner">
+      <v-progress-circular :size="70" :width="7" color="primary" indeterminate></v-progress-circular>
     </div>
   </div>
 </template>
 
 <script>
-import * as data from "../MOCK/mockComputer";
 import ComputerDetails from "./ComputerDetails";
 import CompanyDetails from "./CompanyDetails";
+import { computerApi } from "../api/computer_api.js";
+//import { companyApi } from "../api/company_api.js";
 
 export default {
   name: "ListElements",
   data: () => ({
     elements: Object,
     category: "",
-    searchfilter: "",
-    numberelement: "",
     sortelement: "",
-    responceStatus: "200",
-    responceUrl: "\\computer",
+    responceStatus: "",
+    responceUrl: "",
+    computerSeach: {
+      pageIterator: "",
+      taillePage: "",
+      search: "",
+      order: ""
+    },
     dropdown_category: ["Ordinateur", "Société"],
     dropdown_numberelement: ["10", "50", "100"]
   }),
@@ -75,17 +78,34 @@ export default {
   props: {},
   methods: {
     search() {
-      //TODO Call API
+      if(this.category == 'Ordinateur') {
+      this.searchComputer();
+      } else if (this.category == 'Société') {
+        this.searchCompany();
+      } else {
+        //Error
+      }
     },
+    searchComputer() {
+      var token = sessionStorage.getItem("token");
+      computerApi.findAll(token, this.computerSeach).then(responce => {
+        this.elements = responce.data;
+        this.responceStatus = responce.status;
+        this.responceUrl = responce.config.url;
+      });
+    },
+    searchCompany() {},
     changecategorie(event) {
       this.category = event;
       this.sortelement = "";
-    }
+    },
+    isUrlInclude(element) {
+      return this.responceUrl.includes(element);
+    },
   },
-  computed: {
-    lister() {
-      return data;
-    }
+  computed: {},
+  mounted() {
+    this.search();
   }
 };
 </script>
@@ -124,5 +144,10 @@ export default {
 
 .searchButton {
   top: 2.5vh;
+}
+
+.spinner {
+  text-align: center;
+  margin-top: 5%;
 }
 </style>
