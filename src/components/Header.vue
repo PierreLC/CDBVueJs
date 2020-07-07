@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-card color="grey lighten-4" flat height="200px" tile>
+    <v-card color="grey lighten-4" flat tile>
       <v-toolbar prominent extended>
         <router-link to="/">
           <v-btn class="dashboard">
@@ -257,7 +257,7 @@ export default {
 }
 
 .LBC {
-  position: relative;
+  position: absolute;
   background-color: #3b5998;
   left: 0;
   right: 0;

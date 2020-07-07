@@ -26,9 +26,9 @@
               <v-card-actions>
                 <v-spacer></v-spacer>
 
-                <v-btn color="error" @click="dialog = false">Oui</v-btn>
+                <v-btn color="error" @click="deleteComputer()">Oui</v-btn>
 
-                <v-btn color="primary" @click="deleteComputer">Non</v-btn>
+                <v-btn color="primary" @click="dialog = false">Non</v-btn>
               </v-card-actions>
             </v-card>
           </v-dialog>
@@ -40,18 +40,22 @@
 
 <script>
 import EditElement from "./EditElement";
+import { computerApi } from "../api/computer_api";
 
 export default {
   name: "ComputerDetails",
   data: () => ({
     sheet: false,
-    dialog: false
+    dialog: false,
   }),
   components: { EditElement },
   props: { computer: Object },
   methods: { deleteComputer() {
-    this.dialog = false;
-  }, editComputer() {//TODO Call API
+    console.log(this.computer.id)
+    computerApi.deleteComputer(this.computer.id);
+    // this.dialog = false;
+  }, 
+  editComputer() {//TODO Call API
   } }
 };
 </script>
