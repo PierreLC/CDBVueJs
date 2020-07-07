@@ -10,17 +10,17 @@
           v-model="category"
           class="topcardElements"
         ></v-select>
-        <v-text-field v-model="computerSeach.search" @keydown.enter="search" label="Recherche" clearable class="searchBar"></v-text-field>
+        <v-text-field v-model="computerSearch.search" @keydown.enter="search" label="Recherche" clearable class="searchBar"></v-text-field>
         <v-select
           :items="dropdown_numberelement"
           filled
           label="Nombre d'éléments"
-          v-model="computerSeach.taillePage"
+          v-model="computerSearch.taillePage"
           class="topcardElements"
         ></v-select>
       </v-row>
       <v-row justify="center" align="center" v-if="category === 'Ordinateur'">
-        <v-chip-group active-class="primary--text" v-model="sortelement">
+        <v-chip-group active-class="primary--text" v-model="computerSearch.order">
           <v-chip>Nom</v-chip>
           <v-chip>Date de mise en service</v-chip>
           <v-chip>Date de fin de serivce</v-chip>
@@ -28,7 +28,7 @@
         </v-chip-group>
       </v-row>
       <v-row justify="center" align="center" v-if="category === 'Société'">
-        <v-chip-group active-class="primary--text" v-model="sortelement">
+        <v-chip-group active-class="primary--text" v-model="computerSearch.order">
           <v-chip>Nom</v-chip>
         </v-chip-group>
       </v-row>
@@ -55,18 +55,17 @@
 import ComputerDetails from "./ComputerDetails";
 import CompanyDetails from "./CompanyDetails";
 import { computerApi } from "../api/computer_api.js";
-//import { companyApi } from "../api/company_api.js";
+import { companyApi } from "../api/company_api.js";
 
 export default {
   name: "ListElements",
   data: () => ({
     elements: Object,
     category: "",
-    sortelement: "",
     responceStatus: "",
     responceUrl: "",
-    computerSeach: {
-      pageIterator: "",
+    computerSearch: {
+      pageIterator: "10",
       taillePage: "",
       search: "",
       order: ""
@@ -78,7 +77,7 @@ export default {
   props: {},
   methods: {
     search() {
-      if(this.category == 'Ordinateur') {
+      if(this.category == 'Ordinateur') { 
       this.searchComputer();
       } else if (this.category == 'Société') {
         this.searchCompany();
@@ -88,13 +87,20 @@ export default {
     },
     searchComputer() {
       var token = sessionStorage.getItem("token");
-      computerApi.findAll(token, this.computerSeach).then(responce => {
+      computerApi.findAll(token, this.computerSearch).then(responce => {
         this.elements = responce.data;
         this.responceStatus = responce.status;
         this.responceUrl = responce.config.url;
       });
     },
-    searchCompany() {},
+    searchCompany() {
+      var token = sessionStorage.getItem("token");
+      companyApi.findAll(token).then(responce => {
+        this.elements = responce.data;
+        this.responceStatus = responce.status;
+        this.responceUrl = responce.config.url;
+      })
+    },
     changecategorie(event) {
       this.category = event;
       this.sortelement = "";
