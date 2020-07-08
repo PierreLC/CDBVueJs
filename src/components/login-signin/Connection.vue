@@ -60,8 +60,8 @@ export default {
     loginMethod() {
       userApi.login(this.username, this.userpassword).then((response) => {
         let token = "token";
-        console.log(response.data)
         sessionStorage.setItem(token, response.data);
+        this.$router.push({name: "Dashboard", query: { redirect:'/path'}})
       });
     },
   },

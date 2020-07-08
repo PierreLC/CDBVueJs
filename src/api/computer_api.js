@@ -6,15 +6,16 @@ export default class ComputerApi {
     }
 
     findAll() {
-        return this.axios.get('/computers',{ headers: {"authorization": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJldGllbm5lIiwiZXhwIjoxNTk0MTcxMjk1LCJpYXQiOjE1OTQxMzUyOTV9.s-cdIZqydA7EYykNnwsrDfXxHEEBtJok7hr8Vud2kWqUwrlOwgK9kvip5CVi5g1CpGlLo74qAt8U7GHtysi7Cg"}})
+        return this.axios.get('/computers',{ headers: {"authorization": "Bearer "+sessionStorage.getItem('token')}})
     }
 
     create(computerDTO) {
-        return this.axios.post('/computers', computerDTO, { headers: {"Content-Type": "application/json", "authorization": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJldGllbm5lIiwiZXhwIjoxNTk0MTcxMjk1LCJpYXQiOjE1OTQxMzUyOTV9.s-cdIZqydA7EYykNnwsrDfXxHEEBtJok7hr8Vud2kWqUwrlOwgK9kvip5CVi5g1CpGlLo74qAt8U7GHtysi7Cg"}})
+        return this.axios.post('/computers', computerDTO, { headers: {"Content-Type": "application/json", "authorization": "Bearer "+sessionStorage.getItem('token')}})
     }
     
-    deleteComputer(id) {
-        return this.axios.delete('/computers/' + id, { headers: {"Content-Type": "application/json", "authorization": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJldGllbm5lIiwiZXhwIjoxNTk0MTcxMjk1LCJpYXQiOjE1OTQxMzUyOTV9.s-cdIZqydA7EYykNnwsrDfXxHEEBtJok7hr8Vud2kWqUwrlOwgK9kvip5CVi5g1CpGlLo74qAt8U7GHtysi7Cg"}})
+    delete(id) {
+        return this.axios.delete('/computers/' + id, {headers: {"authorization": "Bearer "+sessionStorage.getItem('token')}})
+
     }
 }
 
