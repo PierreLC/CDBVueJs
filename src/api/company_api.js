@@ -1,15 +1,13 @@
-import { axios } from "./index";
+import { axios } from './index'
 
 export default class CompanyApi {
-  constructor(axiosInstance) {
-    this.axios = axiosInstance;
-  }
+    constructor(axiosInstance) {
+        this.axios = axiosInstance
+    }
 
-  findAll(token) {
-    return this.axios.get("/companies", {
-      headers: { authorization: "Bearer " + token },
-    });
-  }
+    findAll(token) {
+        return this.axios.get('/companies',{ headers: {"authorization": "Bearer "+ token}});
+    }
 }
 
-export const companyApi = new CompanyApi(axios);
+export const companyApi = new CompanyApi(axios)

@@ -7,14 +7,14 @@ export default class ComputerApi {
 
   findAll(token, computerSreach) {
     return this.axios.get(
-     // "/computers?pageIterator=" +
-      //  computerSreach.pageIterator +
-        //"&taillePage=" +
-        //computerSreach.taillePage +
-        "/computers?search=" +
-        computerSreach.search ,
-        //"&order=" +
-        //computerSreach.order,
+      "/computers?pageIterator=" +
+        computerSreach.pageIterator +
+        "&taillePage=" +
+        computerSreach.taillePage +
+        "&search=" +
+        computerSreach.search +
+        "&order=" +
+        computerSreach.order,
       {
         headers: {
           authorization: "Bearer " + token,
