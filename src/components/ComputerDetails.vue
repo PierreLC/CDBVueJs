@@ -16,7 +16,6 @@
             <v-sheet class="text-center" height="200px">
               <v-btn color="red" @click="sheet = !sheet">Close</v-btn>
               <EditElement style="editelement" />
-              <!--TODO Commande pour installation du front-->
             </v-sheet>
           </v-bottom-sheet>
           <v-btn color="error" class="bottomButton" @click="dialog = true">Supprimer</v-btn>
