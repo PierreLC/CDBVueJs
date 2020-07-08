@@ -17,6 +17,19 @@
                 <v-icon>mdi-plus</v-icon>
                 Add Element
               </v-btn>
+              <v-btn
+                outlined
+                color="indigo"
+                dark
+                @click="CompanyModal = !CompanyModal"
+              >
+                <v-icon>mdi-plus</v-icon>Add Company
+              </v-btn>
+              <v-dialog v-model="CompanyModal" persistent max-width="290">
+                <v-card>
+                  <AddCompany @clickeModal="emitBoolClose"/>
+                </v-card>
+              </v-dialog>
             </template>
             <v-card>
               <v-card-title> </v-card-title>
@@ -38,7 +51,6 @@
                         :items="companies"
                         item-value="id"
                         item-text="name"
-
                       >
                       </v-autocomplete>
                     </v-col>
@@ -177,19 +189,20 @@ import { companyApi } from "../api/company_api";
 import { computerApi } from "../api/computer_api";
 import { frenchFlag } from "../assets/images/fr-flag.png";
 import { englishFlag } from "@/assets/images/en-flag.png";
+import AddCompany from "./AddCompany";
 
 export default {
   name: "Header",
 
   data: (vm) => ({
+    CompanyModal: false,
     language: "fr",
     languages: [
       { locale: "fr", icon: frenchFlag, title: "Français" },
       { locale: "en", icon: englishFlag, title: "English" },
     ],
-    companies: [
-    ],
-    company: { },
+    companies: [],
+    company: {},
     id: 0,
     computer: {
       name: "",
@@ -199,20 +212,30 @@ export default {
     },
     date: new Date().toISOString().substr(0, 10),
     dateFormatted: vm.formatDate(new Date().toISOString().substr(0, 10)),
-    menu1: false,
+    menu: false,
     dialog: false,
   }),
 
   props: {},
-
+  components: { AddCompany },
   methods: {
     changeLang(index) {
       this.locale = this.languages[index].locale;
     },
-
+    emitBoolClose(value){
+      this.CompanyModal = value;
+    },
+    addCompany() {
+      console.log("toto");
+    },
     addElement() {
-      var company = { id:this.id, name: ""};
-      const computer = { name: this.computer.name, introduced: this.computer.introduced, discontinued: this.computer.discontinued, company: company};
+      var company = { id: this.id, name: "" };
+      const computer = {
+        name: this.computer.name,
+        introduced: this.computer.introduced,
+        discontinued: this.computer.discontinued,
+        company: company,
+      };
       computerApi.create(computer);
     },
 
