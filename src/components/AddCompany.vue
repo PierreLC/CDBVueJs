@@ -28,11 +28,11 @@ export default {
   }),
   props: {},
   methods: {
-emitBoolClose: function(){
-    this.$emit('clickeModal',false)
-},
+    emitBoolClose: function() {
+      this.$emit("clickeModal", false);
+    },
     addCompany() {
-        companyApi.create(this.company);
+      companyApi.create(this.company);
     },
   },
 };

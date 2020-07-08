@@ -6,7 +6,7 @@ export default class CompanyApi {
     }
 
     findAll() {
-        return this.axios.get('/companies',{ headers: {"authorization": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJldGllbm5lIiwiZXhwIjoxNTk0MTQ0MzYyLCJpYXQiOjE1OTQxMDgzNjJ9.cLukJIOupcFC6vmiVldBRZVjdw8vnziaxaae82OCvUEgbKulFzwlAkSiCFmaCIqDl62LQVgASvdX6yWC726IEw"}});
+        return this.axios.get('/companies',{ headers: {"authorization": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJldGllbm5lIiwiZXhwIjoxNTk0MjMyNzk4LCJpYXQiOjE1OTQxOTY3OTh9.AfQpsVcbaF_FtAL6MHbzf7s_AZIfx9sTPKNHePKVdkMK6rBOzEXt4xvS9WwBs082kQn5B2Oh7Jnifa9ZzwfXhA"}});
     }
 
     create(company) {
