@@ -7,6 +7,7 @@ export default class CompanyApi {
 
     findAll() {
         return this.axios.get('/companies',{ headers: {"authorization": "Bearer "+sessionStorage.getItem('token')}});
+
     }
 
     create(company) {

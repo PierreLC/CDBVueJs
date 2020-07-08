@@ -15,6 +15,7 @@ export default class ComputerApi {
     
     delete(id) {
         return this.axios.delete('/computers/' + id, {headers: {"authorization": "Bearer "+sessionStorage.getItem('token')}})
+
     }
 }
 
