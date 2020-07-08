@@ -1,5 +1,7 @@
 {
   "HEADER": {
+    "HELLO": "Hello",
+    "WELCOME": "Welcome",
     "TITLE": "Home",
     "ADD": "Add",
     "NOTIFICATIONS": "Notifications",

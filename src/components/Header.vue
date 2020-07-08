@@ -38,7 +38,6 @@
                         :items="companies"
                         item-value="id"
                         item-text="name"
-
                       >
                       </v-autocomplete>
                     </v-col>
@@ -121,9 +120,14 @@
           </v-dialog>
         </v-row>
 
-        <v-btn-toggle name="language" tile color="deep-purple accent-3" group>
-          <div class="languages">
-            <v-menu>
+        <v-btn-toggle
+          name="rightButtons"
+          tile
+          color="deep-purple accent-3"
+          group
+        >
+          <!-- <div class="languages"> -->
+          <!-- <v-menu>
               <template v-slot:activator="{ on: menu, attrs }">
                 <v-tooltip bottom>
                   <template v-slot:activator="{ on: tooltip }">
@@ -132,8 +136,8 @@
                       v-on="{ ...tooltip, ...menu }"
                       :value="1"
                     >
-                      <!-- <span v-if="this.language === 'fr'">Français</span>
-                      <span v-if="this.language === 'en'">English</span> -->
+                      <span v-if="this.language === 'fr'">Français</span>
+                      <span v-if="this.language === 'en'">English</span>
                       <v-icon>mdi-earth</v-icon>
                     </v-btn>
                   </template>
@@ -149,21 +153,29 @@
                   <v-list-item-title>{{ language.icon }}</v-list-item-title>
                 </v-list-item>
               </v-list>
-            </v-menu>
+            </v-menu> -->
+          <div id="languages">
+            <p>{{ $t("Hello") }} - {{ $t("Welcome") }}</p>
+            <p>
+              <select v-model="$i18n.locale">
+                <option value="fr">fr</option>
+                <option value="en">en</option>
+              </select>
+            </p>
+          </div>
 
-            <div class="notifications">
-              <v-btn :value="2">
-                <v-icon>mdi-bell</v-icon>
+          <div class="notifications">
+            <v-btn :value="2">
+              <v-icon>mdi-bell</v-icon>
+            </v-btn>
+          </div>
+
+          <div class="personButton">
+            <router-link to="/Authentication">
+              <v-btn :value="3">
+                <v-icon>mdi-account</v-icon>
               </v-btn>
-            </div>
-
-            <div class="personButton">
-              <router-link to="/Authentication">
-                <v-btn :value="3">
-                  <v-icon>mdi-account</v-icon>
-                </v-btn>
-              </router-link>
-            </div>
+            </router-link>
           </div>
         </v-btn-toggle>
       </v-toolbar>
@@ -175,21 +187,18 @@
 <script>
 import { companyApi } from "../api/company_api";
 import { computerApi } from "../api/computer_api";
-import { frenchFlag } from "../assets/images/fr-flag.png";
-import { englishFlag } from "@/assets/images/en-flag.png";
 
 export default {
   name: "Header",
 
   data: (vm) => ({
-    language: "fr",
-    languages: [
-      { locale: "fr", icon: frenchFlag, title: "Français" },
-      { locale: "en", icon: englishFlag, title: "English" },
-    ],
-    companies: [
-    ],
-    company: { },
+    // language: "fr",
+    // languages: [
+    //   { locale: "fr", icon: frenchFlag, title: "Français" },
+    //   { locale: "en", icon: englishFlag, title: "English" },
+    // ],
+    companies: [],
+    company: {},
     id: 0,
     computer: {
       name: "",
@@ -211,8 +220,13 @@ export default {
     },
 
     addElement() {
-      var company = { id:this.id, name: ""};
-      const computer = { name: this.computer.name, introduced: this.computer.introduced, discontinued: this.computer.discontinued, company: company};
+      var company = { id: this.id, name: "" };
+      const computer = {
+        name: this.computer.name,
+        introduced: this.computer.introduced,
+        discontinued: this.computer.discontinued,
+        company: company,
+      };
       computerApi.create(computer);
     },
 

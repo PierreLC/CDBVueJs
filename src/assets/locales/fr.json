@@ -1,5 +1,7 @@
 {
   "HEADER": {
+    "HELLO": "Bwan giorno",
+    "WELCOME": "Salut à toi jeune entrepreneur !",
     "TITLE": "Accueil",
     "ADD": "Ajouter",
     "NOTIFICATIONS": "Notifications",
