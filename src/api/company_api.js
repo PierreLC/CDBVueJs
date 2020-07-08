@@ -6,7 +6,12 @@ export default class CompanyApi {
     }
 
     findAll() {
-        return this.axios.get('/companies',{ headers: {"authorization": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJldGllbm5lIiwiZXhwIjoxNTk0MTcxMjk1LCJpYXQiOjE1OTQxMzUyOTV9.s-cdIZqydA7EYykNnwsrDfXxHEEBtJok7hr8Vud2kWqUwrlOwgK9kvip5CVi5g1CpGlLo74qAt8U7GHtysi7Cg"}});
+        return this.axios.get('/companies',{ headers: {"authorization": "Bearer "+sessionStorage.getItem('token')}});
+
+    }
+
+    create(company) {
+        return this.axios.post('/companies', company, { headers: {"Content-Type": "application/json", "authorization": "Bearer "+sessionStorage.getItem('token')}})
     }
 }
 
