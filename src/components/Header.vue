@@ -1,9 +1,9 @@
 <template>
-  <div>
-    <v-card color="grey lighten-4" flat tile>
-      <v-toolbar prominent extended>
+  <div class="header">
+    <v-card class="headerCard" flat tile>
+      <v-toolbar class="headerToolbar">
         <router-link to="/">
-          <v-btn class="dashboard">
+          <v-btn class="homeButton">
             <v-icon>mdi-home</v-icon>
           </v-btn>
         </router-link>
@@ -13,9 +13,9 @@
         <v-row justify="center">
           <v-dialog v-model="dialog" persistent>
             <template v-slot:activator="{ on, attrs }">
-              <v-btn outlined color="indigo" dark v-bind="attrs" v-on="on">
-                <v-icon>mdi-plus</v-icon>
-                Add Element
+              <v-btn class="addButton" outlined v-bind="attrs" v-on="on">
+                <v-icon class="plusIcon">mdi-plus</v-icon>
+                <p class="addText">{{ $t("HEADER.ADD") }}</p>
               </v-btn>
             </template>
             <v-card>
@@ -45,8 +45,8 @@
                       <v-container>
                         <v-row>
                           <v-menu
-                            ref="menu"
-                            v-model="menu"
+                            ref="menu1"
+                            v-model="menu1"
                             :close-on-content-click="false"
                             transition="scale-transition"
                             offset-y
@@ -120,68 +120,45 @@
           </v-dialog>
         </v-row>
 
-        <v-btn-toggle
-          name="rightButtons"
-          tile
-          color="deep-purple accent-3"
-          group
-        >
-          <!-- <div class="languages"> -->
-          <!-- <v-menu>
-              <template v-slot:activator="{ on: menu, attrs }">
-                <v-tooltip bottom>
-                  <template v-slot:activator="{ on: tooltip }">
-                    <v-btn
-                      v-bind="attrs"
-                      v-on="{ ...tooltip, ...menu }"
-                      :value="1"
-                    >
-                      <span v-if="this.language === 'fr'">Français</span>
-                      <span v-if="this.language === 'en'">English</span>
-                      <v-icon>mdi-earth</v-icon>
-                    </v-btn>
-                  </template>
-                  <span>Select your language</span>
-                </v-tooltip>
-              </template>
-              <v-list>
-                <v-list-item
-                  v-for="(language, index) in languages"
-                  :key="index"
-                  @click="changeLang()"
-                >
-                  <v-list-item-title>{{ language.icon }}</v-list-item-title>
-                </v-list-item>
-              </v-list>
-            </v-menu> -->
-          <div id="languages">
-            <p>{{ $t("Hello") }} - {{ $t("Welcome") }}</p>
-            <p>
-              <select v-model="$i18n.locale">
-                <option value="fr">fr</option>
-                <option value="en">en</option>
-              </select>
-            </p>
-          </div>
+        <v-item group class="rightButtons">
+          <v-container>
+            <div class="languagesDiv">
+              <v-menu top offset-y>
+                <template v-slot:activator="{ on, attrs }">
+                    <v-icon v-bind="attrs" v-on="on">mdi-earth</v-icon>
+                </template>
 
-          <div class="notifications">
-            <v-btn :value="2">
-              <v-icon>mdi-bell</v-icon>
-            </v-btn>
-          </div>
+                <v-list>
+                  <v-list-item
+                    v-for="(lang, i) in langs"
+                    :key="`Lang${i}`"
+                    :value="lang"
+                    @click="changeLang(lang)"
+                  >
+                    <v-list-item-title>{{ lang }}</v-list-item-title>
+                  </v-list-item>
+                </v-list>
+              </v-menu>
+            </div>
 
-          <div class="personButton">
-            <router-link to="/Authentication">
-              <v-btn :value="3">
-                <v-icon>mdi-account</v-icon>
-              </v-btn>
-            </router-link>
-          </div>
-        </v-btn-toggle>
+            <div class="notificationsDiv">
+                <v-icon class="notificationsButton">mdi-bell</v-icon>
+            </div>
+
+            <div class="logoutDiv">
+              <router-link to="/Authentication">
+                  <v-icon class="logoutButton">mdi-account</v-icon>
+              </router-link>
+            </div>
+          </v-container>
+        </v-item>
+          
       </v-toolbar>
+
     </v-card>
-    <div class="LBC"></div>
+          <div class="roundedCard"></div>
   </div>
+
 </template>
 
 <script>
@@ -192,11 +169,7 @@ export default {
   name: "Header",
 
   data: (vm) => ({
-    // language: "fr",
-    // languages: [
-    //   { locale: "fr", icon: frenchFlag, title: "Français" },
-    //   { locale: "en", icon: englishFlag, title: "English" },
-    // ],
+    langs: ["fr", "en"],
     companies: [],
     company: {},
     id: 0,
@@ -215,10 +188,6 @@ export default {
   props: {},
 
   methods: {
-    changeLang(index) {
-      this.locale = this.languages[index].locale;
-    },
-
     addElement() {
       var company = { id: this.id, name: "" };
       const computer = {
@@ -249,6 +218,11 @@ export default {
       const [month, day, year] = date.split("/");
       return `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
     },
+
+    changeLang(lang) {
+      console.log(lang);
+      this.$i18n.locale = lang;
+    },
   },
 
   computed: {
@@ -265,23 +239,80 @@ export default {
 </script>
 
 <style scoped>
-.dashboard {
-  position: absolute;
-  text-align: center;
+.header {
+position: relative;
+margin-bottom: 2%;
 }
 
-.LBC {
-  position: absolute;
+.roundedCard {
+    position: relative;
   background-color: #3b5998;
   left: 0;
   right: 0;
   overflow: hidden;
   height: 150px;
   width: auto;
+  border: 1px solid #3b5998;
   border-radius: 0 0 50% 50%/0 0 100% 100%;
 }
 
+.headerCard {
+
+}
+
+.headerToolbar { 
+  height: 70px;
+}
+
+.homeButton {
+  position: absolute;
+  justify-content: center;
+  display: flex;
+  left: 5%;
+  top: 20%;
+}
+
 .addButton {
-  text-decoration-color: white;
+  border: 2px solid #3b5998;
+  position: absolute;
+  top: 20%;
+  bottom: 50%;
+  left: 45%;
+  right: 50%;
+  color: #3b5998;
+  text-align: center;
+  text-decoration-color: #3b5998;
+}
+
+.addText {
+  margin-top: 17.5%;
+  text-align: center;
+  color: #3b5998;
+}
+
+.plusIcon {
+  color: white;
+}
+
+.rightButtons {
+  position: absolute;
+  justify-content: right;
+  display: flex;
+  right: 6%;
+  top: 1%;
+
+}
+
+.languagesButton {
+
+}
+
+.notificationsButton {
+  margin-left: 50%;
+}
+
+.logoutButton {
+  margin-left: 100%;
+  transform: scale(0.8, 0.8, 0.8);
 }
 </style>
