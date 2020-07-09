@@ -49,15 +49,24 @@ export default {
   }),
   components: { EditElement },
   props: { computer: Object },
-  methods: { deleteComputer() {
-    this.dialog = false;
-  }, editComputer() {//TODO Call API
-  } }
+  methods: {
+    deleteComputer() {
+      this.dialog = false;
+    },
+    editComputer() {
+      //TODO Call API
+    }
+  },
+  computed: {}
 };
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.elementPanel {
+  margin-top: 1vh;
+}
+
 .buttonContainer {
   text-align: right;
 }

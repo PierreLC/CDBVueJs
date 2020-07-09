@@ -36,8 +36,14 @@
           <v-chip value="company">Société</v-chip>
         </v-chip-group>
       </v-row>
-      <div class>
-        <v-btn color="primary" @click="search" class="searchButton">Rechercher</v-btn>
+      <div>
+        <v-btn
+          v-if="responceStatus !== ''"
+          color="primary"
+          @click="search"
+          class="searchButton"
+        >Rechercher ({{numberElement}} Resultats)</v-btn>
+        <v-btn v-else color="primary" @click="search" class="searchButton">Rechercher</v-btn>
       </div>
     </v-card>
 
@@ -50,18 +56,23 @@
 
     <div v-if="responceStatus === 200" class="elementsPanel">
       <div v-if="isUrlInclude('/computers')">
-        <ComputerDetails v-for="(element, i) in elements" :key="i" v-bind:computer="element" />
+        <div v-for="(element, i) in elements" :key="i">
+          <v-row justify="center" align="center" class="checkboxRow">
+            <v-checkbox v-model="multiDelete" :value="element.id" v-if="isDeleteRequired"></v-checkbox>
+            <ComputerDetails v-bind:computer="element" />
+          </v-row>
+        </div>
       </div>
       <div v-else-if="isUrlInclude('/companies')">
         <CompanyDetails v-for="(element, i) in elements" :key="i" v-bind:company="element" />
       </div>
-      <div v-else>Error Nothing Found</div>
+      <div v-else>Errer rien trouvé</div>
     </div>
-    <div v-else-if="searching" class="spinner">
+    <div v-else-if="isSearching" class="spinner">
       <v-progress-circular :size="70" :width="7" color="primary" indeterminate></v-progress-circular>
     </div>
-    <v-alert v-else-if="errorAlert === true" type="error" class="alert">{{messageError}}</v-alert>
-    <v-alert v-else-if="alert === true" type="warning" class="alert">Recherche invalide</v-alert>
+    <v-alert v-else-if="isAlertDisplay === true" type="warning" class="alert">Recherche invalide</v-alert>
+    <v-alert v-else-if="isErrorAlertDisplay === true" type="error" class="alert">{{messageError}}</v-alert>
   </div>
 </template>
 
@@ -78,11 +89,13 @@ export default {
     category: "",
     responceStatus: "",
     responceUrl: "",
-    searching: false,
-    alert: false,
-    errorAlert: false,
+    isSearching: false,
+    isAlertDisplay: false,
+    isErrorAlertDisplay: false,
     messageError: "",
-    numberElement: 100,
+    numberElement: 0,
+    isDeleteRequired: false,
+    multiDelete: [],
     elementSearch: {
       pageIterator: 1,
       taillePage: "",
@@ -93,39 +106,44 @@ export default {
       { id: "0", name: "Ordinateur" },
       { id: "1", name: "Société" }
     ],
-    dropdown_numberelement: ["10", "50", "100"]
+    dropdown_numberelement: ["10", "20", "50", "100"]
   }),
   components: { ComputerDetails, CompanyDetails },
   props: {},
   methods: {
     search() {
-      this.searching = true;
-      this.alert = false;
-      this.errorAlert = true;
+      this.isSearching = true;
+      this.isAlertDisplay = false;
+      this.isErrorAlertDisplay = true;
       if (this.category == "0") {
         this.searchComputer();
       } else if (this.category == "1") {
         this.searchCompany();
       } else {
-        this.alert = true;
-        this.searching = false;
+        this.isAlertDisplay = true;
+        this.isSearching = false;
       }
     },
     searchComputer() {
       var token = sessionStorage.getItem("token");
-      console.info(this.elementSearch);
-
+      if (this.elementSearch.taillePage == "") {
+        this.elementSearch.taillePage = "20";
+      }
+      if (this.elementSearch.search == null) {
+        this.elementSearch.search = "";
+      }
       computerApi
         .findAll(token, this.elementSearch)
         .then(responce => {
-          this.elements = responce.data;
+          this.numberElement = responce.data[0];
+          this.elements = responce.data[1];
           this.responceStatus = responce.status;
           this.responceUrl = responce.config.url;
         })
         .catch(error => {
           this.messageError = error;
-          this.errorAlert = true;
-          this.searching = false;
+          this.isErrorAlertDisplay = true;
+          this.isSearching = false;
         });
     },
     searchCompany() {
@@ -139,8 +157,8 @@ export default {
         })
         .catch(error => {
           this.messageError = error;
-          this.errorAlert = true;
-          this.searching = false;
+          this.isErrorAlertDisplay = true;
+          this.isSearching = false;
         });
     },
     changecategorie(event) {
@@ -158,7 +176,7 @@ export default {
   computed: {
     numberPage() {
       if (this.elementSearch.taillePage && this.numberElement) {
-        return this.numberElement / this.elementSearch.taillePage;
+        return Math.ceil(this.numberElement / this.elementSearch.taillePage);
       } else {
         this.DefaultPage();
 
@@ -182,25 +200,26 @@ export default {
   padding-top: 3px;
 }
 
-.elementsPanel {
-  margin: 0 20vw;
+.topcardElements {
+  width: 18.6vw;
+  margin: 1vh;
 }
 
-.elementPanel {
-  margin-top: 1vh;
+.elementsPanel {
+  margin: 0 20vw;
 }
 
 .editelement {
   margin-bottom: 3vw;
 }
 
-.topcardElements {
-  width: 18.6vw;
-  margin: 1vh;
-}
-
 .searchButton {
   top: 2.5vh;
+}
+
+.checkboxRow {
+  flex-wrap: nowrap;
+  margin-top: 1vh;
 }
 
 .spinner {
