@@ -22,19 +22,20 @@ export default class ComputerApi {
       }
     );
   }
-
+  
   create(computerDTO) {
     return this.axios.post("/computers", computerDTO, {
       headers: {
         "Content-Type": "application/json",
-        authorization:
-          "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJldGllbm5lIiwiZXhwIjoxNTk0MTQ0MzYyLCJpYXQiOjE1OTQxMDgzNjJ9.cLukJIOupcFC6vmiVldBRZVjdw8vnziaxaae82OCvUEgbKulFzwlAkSiCFmaCIqDl62LQVgASvdX6yWC726IEw",
+        authorization: "Bearer " + sessionStorage.getItem("token"),
       },
     });
   }
 
   delete(id) {
-    return this.axios.delete("/computers/" + id);
+    return this.axios.delete("/computers/" + id, {
+      headers: { authorization: "Bearer " + sessionStorage.getItem("token") },
+    });
   }
 }
 

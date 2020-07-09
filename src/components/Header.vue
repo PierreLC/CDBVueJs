@@ -16,6 +16,14 @@
               <v-btn outlined color="indigo" dark v-bind="attrs" v-on="on">
                 <v-icon>mdi-plus</v-icon>Add Element
               </v-btn>
+              <v-btn outlined color="indigo" dark @click="CompanyModal = !CompanyModal">
+                <v-icon>mdi-plus</v-icon>Add Company
+              </v-btn>
+              <v-dialog v-model="CompanyModal" persistent max-width="290">
+                <v-card>
+                  <AddCompany @clickeModal="emitBoolClose" />
+                </v-card>
+              </v-dialog>
             </template>
             <v-card>
               <v-card-title></v-card-title>
@@ -166,11 +174,13 @@ import { companyApi } from "../api/company_api";
 import { computerApi } from "../api/computer_api";
 import { frenchFlag } from "../assets/images/fr-flag.png";
 import { englishFlag } from "@/assets/images/en-flag.png";
+import AddCompany from "./AddCompany";
 
 export default {
   name: "Header",
 
   data: vm => ({
+    CompanyModal: false,
     language: "fr",
     languages: [
       { locale: "fr", icon: frenchFlag, title: "Français" },
@@ -192,12 +202,17 @@ export default {
   }),
 
   props: {},
-
+  components: { AddCompany },
   methods: {
     changeLang(index) {
       this.locale = this.languages[index].locale;
     },
-
+    emitBoolClose(value) {
+      this.CompanyModal = value;
+    },
+    addCompany() {
+      console.log("toto");
+    },
     addElement() {
       var company = { id: this.id, name: "" };
       const computer = {

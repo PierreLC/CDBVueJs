@@ -16,7 +16,6 @@
             <v-sheet class="text-center" height="200px">
               <v-btn color="red" @click="sheet = !sheet">Close</v-btn>
               <EditElement style="editelement" />
-              <!--TODO Commande pour installation du front-->
             </v-sheet>
           </v-bottom-sheet>
           <v-btn color="error" class="bottomButton" @click="dialog = true">Supprimer</v-btn>
@@ -26,9 +25,9 @@
               <v-card-actions>
                 <v-spacer></v-spacer>
 
-                <v-btn color="error" @click="dialog = false">Oui</v-btn>
+                <v-btn color="error" @click="deleteComputer()">Oui</v-btn>
 
-                <v-btn color="primary" @click="deleteComputer">Non</v-btn>
+                <v-btn color="primary" @click="dialog = false">Non</v-btn>
               </v-card-actions>
             </v-card>
           </v-dialog>
@@ -40,6 +39,7 @@
 
 <script>
 import EditElement from "./EditElement";
+import { computerApi } from "../api/computer_api";
 
 export default {
   name: "ComputerDetails",
@@ -51,13 +51,13 @@ export default {
   props: { computer: Object },
   methods: {
     deleteComputer() {
-      this.dialog = false;
+      computerApi.deleteComputer(this.computer.id);
+      // this.dialog = false;
     },
     editComputer() {
       //TODO Call API
     }
-  },
-  computed: {}
+  }
 };
 </script>
 
