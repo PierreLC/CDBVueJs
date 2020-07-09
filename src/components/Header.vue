@@ -1,9 +1,9 @@
 <template>
   <div>
-    <v-card color="grey lighten-4" flat height="200px" tile>
+    <v-card color="grey lighten-4" flat tile>
       <v-toolbar prominent extended>
-        <router-link to="/">
-          <v-btn class="dashboard">
+        <router-link to="/Dashboard">
+          <v-btn class="header">
             <v-icon>mdi-home</v-icon>
           </v-btn>
         </router-link>
@@ -11,12 +11,19 @@
         <v-spacer></v-spacer>
 
         <v-row justify="center">
-          <v-btn outlined color="indigo" dark @click="dialog = !dialog">
-            <v-icon>mdi-plus</v-icon>Add Computer
+          <v-btn
+            class="addButton"
+            outlined
+            color="indigo"
+            dark
+            v-bind="attrs"
+            v-on="on"
+          >
+            <v-icon>mdi-plus</v-icon>{{ $t("HEADER.ADD") }}
           </v-btn>
           <v-dialog v-model="dialog" persistent max-width="290">
             <v-card>
-              <AddElement  @clickCloseAdd="emitCloseAdd"/>
+              <AddElement @clickCloseAdd="emitCloseAdd" />
             </v-card>
           </v-dialog>
           <v-btn
@@ -64,21 +71,33 @@
               </v-list>
             </v-menu>
 
-            <div class="notifications">
-              <v-btn :value="2">
-                <v-icon>mdi-bell</v-icon>
-              </v-btn>
-            </div>
 
-            <div class="personButton">
-              <router-link to="/Authentication">
-                <v-btn :value="3">
-                  <v-icon>mdi-account</v-icon>
-                </v-btn>
-              </router-link>
-            </div>
-          </div>
-        </v-btn-toggle>
+        <div class="languagesDiv">
+          <v-menu top offset-y>
+            <template v-slot:activator="{ on, attrs }">
+              <v-icon class="languagesButton" v-bind="attrs" v-on="on"
+                >mdi-earth</v-icon
+              >
+            </template>
+
+            <v-list>
+              <v-list-item
+                v-for="(lang, i) in langs"
+                :key="`Lang${i}`"
+                :value="lang"
+                @click="changeLang(lang)"
+              >
+                <v-list-item-title>{{ lang }}</v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </v-menu>
+        </div>
+
+        <v-icon class="notificationsButton">mdi-bell</v-icon>
+
+        <router-link to="/Authentication">
+          <v-icon class="logoutButton">mdi-account</v-icon>
+        </router-link>
       </v-toolbar>
     </v-card>
     <div class="LBC"></div>
@@ -86,8 +105,6 @@
 </template>
 
 <script>
-import { frenchFlag } from "../assets/images/fr-flag.png";
-import { englishFlag } from "@/assets/images/en-flag.png";
 import AddCompany from "./AddCompany";
 import AddElement from "./AddElement";
 
@@ -97,12 +114,7 @@ export default {
   data: () => ({
     CompanyModal: false,
     dialog: false,
-
-    language: "fr",
-    languages: [
-      { locale: "fr", icon: frenchFlag, title: "Français" },
-      { locale: "en", icon: englishFlag, title: "English" },
-    ],
+    langs: ["fr", "en"],
   }),
 
   props: {},
