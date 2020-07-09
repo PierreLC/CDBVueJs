@@ -15,21 +15,8 @@
             <template v-slot:activator="{ on, attrs }">
               <v-btn class="addButton" outlined v-bind="attrs" v-on="on">
                 <v-icon class="plusIcon">mdi-plus</v-icon>
-                <p class="addText">{{ $t("HEADER.ADD") }}</p>
+                <p class="addText">Add</p>
               </v-btn>
-              <v-btn
-                outlined
-                color="indigo"
-                dark
-                @click="CompanyModal = !CompanyModal"
-              >
-                <v-icon>mdi-plus</v-icon>Add Company
-              </v-btn>
-              <v-dialog v-model="CompanyModal" persistent max-width="290">
-                <v-card>
-                  <AddCompany @clickeModal="emitBoolClose"/>
-                </v-card>
-              </v-dialog>
             </template>
             <v-card>
               <v-card-title> </v-card-title>
@@ -71,6 +58,7 @@
                                 v-model="dateFormatted"
                                 label="Introduced date"
                                 hint="MM/DD/YYYY format"
+                                :allowed-dates="allowedDates"
                                 v-bind="attrs"
                                 @blur="date = parseDate(dateFormatted)"
                                 v-on="on"
@@ -125,7 +113,7 @@
                 <v-btn color="blue darken-1" text @click="dialog = false"
                   >Close</v-btn
                 >
-                <v-btn color="blue darken-1" text @click="addElement()">
+                <v-btn color="blue darken-1" text @click="addComputer()">
                   Save
                 </v-btn>
               </v-card-actions>
@@ -138,7 +126,7 @@
             <div class="languagesDiv">
               <v-menu top offset-y>
                 <template v-slot:activator="{ on, attrs }">
-                    <v-icon v-bind="attrs" v-on="on">mdi-earth</v-icon>
+                  <v-icon v-bind="attrs" v-on="on">mdi-earth</v-icon>
                 </template>
 
                 <v-list>
@@ -155,49 +143,32 @@
             </div>
 
             <div class="notificationsDiv">
-                <v-icon class="notificationsButton">mdi-bell</v-icon>
+              <v-icon class="notificationsButton">mdi-bell</v-icon>
             </div>
 
             <div class="logoutDiv">
               <router-link to="/Authentication">
-                  <v-icon class="logoutButton">mdi-account</v-icon>
+                <v-icon class="logoutButton">mdi-account</v-icon>
               </router-link>
             </div>
           </v-container>
         </v-item>
-          
       </v-toolbar>
-
     </v-card>
-          <div class="roundedCard"></div>
+    <div class="roundedCard"></div>
   </div>
-
 </template>
 
 <script>
 import { companyApi } from "../api/company_api";
 import { computerApi } from "../api/computer_api";
-<<<<<<< HEAD
-=======
-import { frenchFlag } from "../assets/images/fr-flag.png";
-import { englishFlag } from "@/assets/images/en-flag.png";
-import AddCompany from "./AddCompany";
->>>>>>> develop
 
 export default {
   name: "Header",
 
   data: (vm) => ({
-<<<<<<< HEAD
     langs: ["fr", "en"],
-=======
     CompanyModal: false,
-    language: "fr",
-    languages: [
-      { locale: "fr", icon: frenchFlag, title: "Français" },
-      { locale: "en", icon: englishFlag, title: "English" },
-    ],
->>>>>>> develop
     companies: [],
     company: {},
     id: 0,
@@ -211,24 +182,12 @@ export default {
     dateFormatted: vm.formatDate(new Date().toISOString().substr(0, 10)),
     menu: false,
     dialog: false,
+    allowedDates: ["1971-01-01", "2037-01-01"],
   }),
 
   props: {},
-  components: { AddCompany },
   methods: {
-<<<<<<< HEAD
-=======
-    changeLang(index) {
-      this.locale = this.languages[index].locale;
-    },
-    emitBoolClose(value){
-      this.CompanyModal = value;
-    },
-    addCompany() {
-      console.log("toto");
-    },
->>>>>>> develop
-    addElement() {
+    addComputer() {
       var company = { id: this.id, name: "" };
       const computer = {
         name: this.computer.name,
@@ -251,6 +210,8 @@ export default {
       const [year, month, day] = date.split("-");
       return `${month}/${day}/${year}`;
     },
+
+    allowedDates: (val) => parseInt(val.split("-")[2], 10) % 2 === 0,
 
     parseDate(date) {
       if (!date) return null;
@@ -280,12 +241,12 @@ export default {
 
 <style scoped>
 .header {
-position: relative;
-margin-bottom: 2%;
+  position: relative;
+  margin-bottom: 2%;
 }
 
 .roundedCard {
-    position: relative;
+  position: relative;
   background-color: #3b5998;
   left: 0;
   right: 0;
@@ -297,10 +258,9 @@ margin-bottom: 2%;
 }
 
 .headerCard {
-
 }
 
-.headerToolbar { 
+.headerToolbar {
   height: 70px;
 }
 
@@ -340,11 +300,9 @@ margin-bottom: 2%;
   display: flex;
   right: 6%;
   top: 1%;
-
 }
 
 .languagesButton {
-
 }
 
 .notificationsButton {
