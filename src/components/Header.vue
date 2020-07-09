@@ -14,7 +14,7 @@
           <v-btn outlined color="indigo" dark @click="dialog = !dialog">
             <v-icon>mdi-plus</v-icon>{{ $t("HEADER.ADD") }}
           </v-btn>
-          <v-dialog v-model="dialog" persistent max-width="290">
+          <v-dialog v-model="dialog" persistent>
             <v-card>
               <AddElement @clickCloseAdd="emitCloseAdd" />
             </v-card>
@@ -27,7 +27,7 @@
           >
             <v-icon>mdi-plus</v-icon>Add Company
           </v-btn>
-          <v-dialog v-model="CompanyModal" persistent max-width="290">
+          <v-dialog v-model="CompanyModal" persistent>
             <v-card>
               <AddCompany @clickeModal="emitBoolClose" />
             </v-card>
