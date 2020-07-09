@@ -1,9 +1,9 @@
 <template>
-  <div class="header">
-    <v-card class="headerCard" flat tile>
-      <v-toolbar class="headerToolbar">
+  <div>
+    <v-card color="grey lighten-4" flat tile>
+      <v-toolbar prominent extended>
         <router-link to="/">
-          <v-btn class="homeButton">
+          <v-btn class="header">
             <v-icon>mdi-home</v-icon>
           </v-btn>
         </router-link>
@@ -13,13 +13,25 @@
         <v-row justify="center">
           <v-dialog v-model="dialog" persistent>
             <template v-slot:activator="{ on, attrs }">
-              <v-btn class="addButton" outlined v-bind="attrs" v-on="on">
-                <v-icon class="plusIcon">mdi-plus</v-icon>
-                <p class="addText">{{ $t("HEADER.ADD") }}</p>
+              <v-btn class="addButton" outlined color="indigo" dark v-bind="attrs" v-on="on">
+                <v-icon>mdi-plus</v-icon>{{ $t("HEADER.ADD") }}
               </v-btn>
+              <v-btn
+                outlined
+                color="indigo"
+                dark
+                @click="CompanyModal = !CompanyModal"
+              >
+                <v-icon>mdi-plus</v-icon>Add Company
+              </v-btn>
+              <v-dialog v-model="CompanyModal" persistent max-width="290">
+                <v-card>
+                  <AddCompany @clickeModal="emitBoolClose" />
+                </v-card>
+              </v-dialog>
             </template>
             <v-card>
-              <v-card-title> </v-card-title>
+              <v-card-title></v-card-title>
               <v-card-text>
                 <v-container>
                   <v-row>
@@ -27,7 +39,7 @@
                       <v-text-field
                         label="Computer name*"
                         required
-                        hint="Enter the name of the computer"
+                        hint="Please enter the name of the computer"
                         v-model="computer.name"
                       ></v-text-field>
                     </v-col>
@@ -38,15 +50,14 @@
                         :items="companies"
                         item-value="id"
                         item-text="name"
-                      >
-                      </v-autocomplete>
+                      ></v-autocomplete>
                     </v-col>
                     <v-col cols="12" sm="6">
                       <v-container>
                         <v-row>
                           <v-menu
                             ref="menu"
-                            v-model="menu1"
+                            v-model="menu"
                             :close-on-content-click="false"
                             transition="scale-transition"
                             offset-y
@@ -58,7 +69,6 @@
                                 v-model="dateFormatted"
                                 label="Introduced date"
                                 hint="MM/DD/YYYY format"
-                                :allowed-dates="allowedDates"
                                 v-bind="attrs"
                                 @blur="date = parseDate(dateFormatted)"
                                 v-on="on"
@@ -90,6 +100,7 @@
                                 v-model="dateFormatted"
                                 label="Discontinued date"
                                 hint="MM/DD/YYYY format"
+                                :allowed-dates="allowedDates"
                                 v-bind="attrs"
                                 @blur="date = parseDate(dateFormatted)"
                                 v-on="on"
@@ -113,61 +124,57 @@
                 <v-btn color="blue darken-1" text @click="dialog = false"
                   >Close</v-btn
                 >
-                <v-btn color="blue darken-1" text @click="addComputer()">
-                  Save
-                </v-btn>
+                <v-btn color="blue darken-1" text @click="addElement()"
+                  >Save</v-btn
+                >
               </v-card-actions>
             </v-card>
           </v-dialog>
         </v-row>
 
-        <v-item group class="rightButtons">
-          <v-container>
-            <div class="languagesDiv">
-              <v-menu top offset-y>
-                <template v-slot:activator="{ on, attrs }">
-                  <v-icon v-bind="attrs" v-on="on">mdi-earth</v-icon>
-                </template>
+        <div class="languagesDiv">
+          <v-menu top offset-y>
+            <template v-slot:activator="{ on, attrs }">
+              <v-icon  class="languagesButton" v-bind="attrs" v-on="on">mdi-earth</v-icon>
+            </template>
 
-                <v-list>
-                  <v-list-item
-                    v-for="(lang, i) in langs"
-                    :key="`Lang${i}`"
-                    :value="lang"
-                    @click="changeLang(lang)"
-                  >
-                    <v-list-item-title>{{ lang }}</v-list-item-title>
-                  </v-list-item>
-                </v-list>
-              </v-menu>
-            </div>
+            <v-list>
+              <v-list-item
+                v-for="(lang, i) in langs"
+                :key="`Lang${i}`"
+                :value="lang"
+                @click="changeLang(lang)"
+              >
+                <v-list-item-title>{{ lang }}</v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </v-menu>
+        </div>
 
-            <div class="notificationsDiv">
-              <v-icon class="notificationsButton">mdi-bell</v-icon>
-            </div>
+            <v-icon class="notificationsButton">mdi-bell</v-icon>
 
-            <div class="logoutDiv">
-              <router-link to="/Authentication">
-                <v-icon class="logoutButton">mdi-account</v-icon>
-              </router-link>
-            </div>
-          </v-container>
-        </v-item>
+
+
+          <router-link to="/Authentication">
+
+              <v-icon class="logoutButton">mdi-account</v-icon>
+
+          </router-link>
       </v-toolbar>
     </v-card>
-    <div class="roundedCard"></div>
+    <div class="LBC"></div>
   </div>
 </template>
 
 <script>
 import { companyApi } from "../api/company_api";
 import { computerApi } from "../api/computer_api";
-
+import AddCompany from "./AddCompany";
 export default {
   name: "Header",
-
   data: (vm) => ({
     langs: ["fr", "en"],
+    allowedDates: ["1971-01-01", "2037-01-01"],
     CompanyModal: false,
     companies: [],
     company: {},
@@ -182,12 +189,19 @@ export default {
     dateFormatted: vm.formatDate(new Date().toISOString().substr(0, 10)),
     menu: false,
     dialog: false,
-    allowedDates: ["1971-01-01", "2037-01-01"],
   }),
-
   props: {},
+  components: { AddCompany },
   methods: {
-    addComputer() {
+    allowedDate: (val) => parseInt(val.split("-")[2], 10) % 2 === 0,
+
+    emitBoolClose(value) {
+      this.CompanyModal = value;
+    },
+    addCompany() {
+      console.log("toto");
+    },
+    addElement() {
       var company = { id: this.id, name: "" };
       const computer = {
         name: this.computer.name,
@@ -197,42 +211,32 @@ export default {
       };
       computerApi.create(computer);
     },
-
     findCompanies() {
-      companyApi.findAll().then((response) => {
+      var token = sessionStorage.getItem("token");
+      companyApi.findAll(token).then((response) => {
         this.companies = response.data;
       });
     },
-
     formatDate(date) {
       if (!date) return null;
-
       const [year, month, day] = date.split("-");
       return `${month}/${day}/${year}`;
     },
-
-    allowedDate: (val) => parseInt(val.split("-")[2], 10) % 2 === 0,
-
     parseDate(date) {
       if (!date) return null;
-
       const [month, day, year] = date.split("/");
       return `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
     },
-
     changeLang(lang) {
-      console.log(lang);
       this.$i18n.locale = lang;
     },
   },
-
   computed: {
     computedDateFormatted() {
       return this.formatDate(this.date);
     },
     options: () => this.name,
   },
-
   mounted() {
     this.findCompanies();
   },
@@ -240,7 +244,24 @@ export default {
 </script>
 
 <style scoped>
-.header {
+/* .dashboard {
+  position: absolute;
+  text-align: center;
+}
+.LBC {
+  position: absolute;
+  background-color: #3b5998;
+  left: 0;
+  right: 0;
+  overflow: hidden;
+  height: 150px;
+  width: auto;
+  border-radius: 0 0 50% 50%/0 0 100% 100%;
+}
+.addButton {
+  text-decoration-color: white;
+} */
+/* .header {
   position: relative;
   margin-bottom: 2%;
 }
@@ -255,9 +276,6 @@ export default {
   width: auto;
   border: 1px solid #3b5998;
   border-radius: 0 0 50% 50%/0 0 100% 100%;
-}
-
-.headerCard {
 }
 
 .headerToolbar {
@@ -285,7 +303,7 @@ export default {
 }
 
 .addText {
-  margin-top: 17.5%;
+  margin-top: 12%;
   text-align: center;
   color: #3b5998;
 }
@@ -302,9 +320,6 @@ export default {
   top: 1%;
 }
 
-.languagesButton {
-}
-
 .notificationsButton {
   margin-left: 50%;
 }
@@ -312,5 +327,5 @@ export default {
 .logoutButton {
   margin-left: 100%;
   transform: scale(0.8, 0.8, 0.8);
-}
+} */
 </style>
