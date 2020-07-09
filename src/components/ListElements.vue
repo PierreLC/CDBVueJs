@@ -59,7 +59,7 @@
         <div v-for="(element, i) in elements" :key="i">
           <v-row justify="center" align="center" class="checkboxRow">
             <v-checkbox v-model="multiDelete" :value="element.id" v-if="isDeleteRequired"></v-checkbox>
-            <ComputerDetails v-bind:computer="element" />
+            <ComputerDetails v-bind:computer="element" @clickRefresh="search"/>
           </v-row>
         </div>
       </div>

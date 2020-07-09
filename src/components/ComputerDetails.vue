@@ -25,9 +25,10 @@
               <v-card-actions>
                 <v-spacer></v-spacer>
 
+                <v-btn color="primary" @click="dialog = false">Non</v-btn>
+
                 <v-btn color="error" @click="deleteComputer()">Oui</v-btn>
 
-                <v-btn color="primary" @click="dialog = false">Non</v-btn>
               </v-card-actions>
             </v-card>
           </v-dialog>
@@ -51,8 +52,9 @@ export default {
   props: { computer: Object },
   methods: {
     deleteComputer() {
-      computerApi.deleteComputer(this.computer.id);
-      // this.dialog = false;
+      computerApi.delete(this.computer.id);
+      this.dialog = false;
+      this.$emit("clickRefresh");
     },
     editComputer() {
       //TODO Call API
