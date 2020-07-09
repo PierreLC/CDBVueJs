@@ -38,8 +38,9 @@ export default class ComputerApi {
     });
   }
 
-  deleteMulti() {
-    return this.axios.delete("/computers", {
+  deleteMulti(multiDeleteString) {
+    console.log(multiDeleteString)
+    return this.axios.delete("/computers?ids=" + multiDeleteString +"", {
       headers: { authorization: "Bearer " + sessionStorage.getItem("token") },
     });
   }

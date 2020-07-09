@@ -26,7 +26,6 @@
           label="Nombre d'éléments"
           v-model="elementSearch.taillePage"
           class="topcardElements"
-          @change="changePageSize()"
         ></v-select>
       </v-row>
       <v-row justify="center" align="center" v-if="category === '0'">
@@ -56,7 +55,7 @@
           small
           @click="isDeleteRequired = !isDeleteRequired"
           class="deleteButton"
-          v-if="isUrlInclude('/computers') && category !== '1'"
+          v-if="isUrlInclude('/computers') && category === '0'"
           :disabled="isButtonClicked"
         >
           <v-icon>mdi-delete</v-icon>
@@ -145,6 +144,7 @@ export default {
       this.isAlertDisplay = false;
       this.isErrorAlertDisplay = true;
       this.isButtonClicked = true;
+      this.multiDelete = [];
       if (this.category == "0") {
         this.searchComputer();
       } else if (this.category == "1") {
@@ -161,6 +161,9 @@ export default {
       }
       if (this.elementSearch.search == null) {
         this.elementSearch.search = "";
+      }
+      if (this.elementSearch.order == undefined) {
+        this.elementSearch.order = "";
       }
       computerApi
         .findAll(this.elementSearch)
@@ -196,7 +199,7 @@ export default {
     },
     deleteManyComputer() {
       computerApi
-        .deleteMulti()
+        .deleteMulti(this.multiDelete)
         .then(responce => {
           console.log(responce);
         })
@@ -208,11 +211,6 @@ export default {
       this.alert = false;
       this.category = event;
       this.sortelement = "";
-    },
-    changePageSize() {
-      if (this.isUrlInclude("/computers")) {
-        this.searchComputer();
-      }
     },
     isUrlInclude(element) {
       return this.responceUrl.includes(element);
