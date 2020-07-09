@@ -25,9 +25,9 @@
               <v-card-actions>
                 <v-spacer></v-spacer>
 
-                <v-btn color="error" @click="dialog = false">Oui</v-btn>
+                <v-btn color="error" @click="deleteComputer()">Oui</v-btn>
 
-                <v-btn color="primary" @click="deleteComputer">Non</v-btn>
+                <v-btn color="primary" @click="dialog = false">Non</v-btn>
               </v-card-actions>
             </v-card>
           </v-dialog>
@@ -39,6 +39,7 @@
 
 <script>
 import EditElement from "./EditElement";
+import { computerApi } from "../api/computer_api";
 
 export default {
   name: "ComputerDetails",
@@ -48,15 +49,24 @@ export default {
   }),
   components: { EditElement },
   props: { computer: Object },
-  methods: { deleteComputer() {
-    this.dialog = false;
-  }, editComputer() {//TODO Call API
-  } }
+  methods: {
+    deleteComputer() {
+      computerApi.deleteComputer(this.computer.id);
+      // this.dialog = false;
+    },
+    editComputer() {
+      //TODO Call API
+    }
+  }
 };
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.elementPanel {
+  margin-top: 1vh;
+}
+
 .buttonContainer {
   text-align: right;
 }

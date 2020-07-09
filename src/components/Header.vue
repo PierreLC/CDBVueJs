@@ -11,14 +11,7 @@
         <v-spacer></v-spacer>
 
         <v-row justify="center">
-          <v-btn
-            class="addButton"
-            outlined
-            color="indigo"
-            dark
-            v-bind="attrs"
-            v-on="on"
-          >
+          <v-btn outlined color="indigo" dark @click="dialog = !dialog">
             <v-icon>mdi-plus</v-icon>{{ $t("HEADER.ADD") }}
           </v-btn>
           <v-dialog v-model="dialog" persistent max-width="290">
@@ -40,37 +33,6 @@
             </v-card>
           </v-dialog>
         </v-row>
-
-        <v-btn-toggle name="language" tile color="deep-purple accent-3" group>
-          <div class="languages">
-            <v-menu>
-              <template v-slot:activator="{ on: menu, attrs }">
-                <v-tooltip bottom>
-                  <template v-slot:activator="{ on: tooltip }">
-                    <v-btn
-                      v-bind="attrs"
-                      v-on="{ ...tooltip, ...menu }"
-                      :value="1"
-                    >
-                      <!-- <span v-if="this.language === 'fr'">Français</span>
-                      <span v-if="this.language === 'en'">English</span> -->
-                      <v-icon>mdi-earth</v-icon>
-                    </v-btn>
-                  </template>
-                  <span>Select your language</span>
-                </v-tooltip>
-              </template>
-              <v-list>
-                <v-list-item
-                  v-for="(language, index) in languages"
-                  :key="index"
-                  @click="changeLang()"
-                >
-                  <v-list-item-title>{{ language.icon }}</v-list-item-title>
-                </v-list-item>
-              </v-list>
-            </v-menu>
-
 
         <div class="languagesDiv">
           <v-menu top offset-y>
