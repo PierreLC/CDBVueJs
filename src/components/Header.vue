@@ -1,41 +1,48 @@
 <template>
   <div class="mainElement">
-    <v-row justify="center" align="center" class="rowHeader">
-      <router-link to="/Dashboard">
-        <v-btn class="headerButton">
-          <v-img src=""></v-img>
-          <v-icon>mdi-home</v-icon>
+    <v-row align="center" justify="center">
+      <v-col class="rowDisplayCenter">
+        <router-link to="/Dashboard">
+          <v-btn class="headerButton logoButton"> </v-btn>
+        </router-link>
+      </v-col>
+
+      <v-col class="rowDisplayCenter">
+        <v-btn
+          outlined
+          color="indigo"
+          dark
+          @click="dialog = !dialog"
+          class="headerButton"
+        >
+          <v-icon>mdi-plus</v-icon>
+          {{ $t("HEADER.ADD") }}
         </v-btn>
-      </router-link>
+        <v-dialog v-model="dialog" persistent>
+          <v-card>
+            <AddElement @clickCloseAdd="emitCloseAdd" />
+          </v-card>
+        </v-dialog>
+        <v-btn
+          outlined
+          color="indigo"
+          dark
+          @click="CompanyModal = !CompanyModal"
+          class="headerButton"
+        >
+          <v-icon>mdi-plus</v-icon>Add Company
+        </v-btn>
+        <v-dialog v-model="CompanyModal" persistent>
+          <v-card>
+            <AddCompany @clickeModal="emitBoolClose" />
+          </v-card>
+        </v-dialog>
+      </v-col>
 
-      <v-btn outlined color="indigo" dark @click="dialog = !dialog" class="headerButton">
-        <v-icon>mdi-plus</v-icon>
-        {{ $t("HEADER.ADD") }}
-      </v-btn>
-      <v-dialog v-model="dialog" persistent>
-        <v-card>
-          <AddElement @clickCloseAdd="emitCloseAdd" />
-        </v-card>
-      </v-dialog>
-      <v-btn
-        outlined
-        color="indigo"
-        dark
-        @click="CompanyModal = !CompanyModal"
-        class="headerButton"
-      >
-        <v-icon>mdi-plus</v-icon>Add Company
-      </v-btn>
-      <v-dialog v-model="CompanyModal" persistent>
-        <v-card>
-          <AddCompany @clickeModal="emitBoolClose" />
-        </v-card>
-      </v-dialog>
-
-      <div class="languagesDiv">
+      <v-col class="rowDisplayRight">
         <v-menu top offset-y>
           <template v-slot:activator="{ on, attrs }">
-            <v-btn color="headerButton" fab small dark>
+            <v-btn color="headerButton" fab small light>
               <v-icon v-bind="attrs" v-on="on">mdi-earth</v-icon>
             </v-btn>
           </template>
@@ -51,18 +58,17 @@
             </v-list-item>
           </v-list>
         </v-menu>
-      </div>
 
-      <v-btn color="headerButton" fab small dark>
-        <v-icon>mdi-bell</v-icon>
-      </v-btn>
-      <router-link to="/Authentication">
-        <v-btn color="headerButton" fab small dark>
-          <v-icon>mdi-account</v-icon>
+        <v-btn color="headerButton" fab small light>
+          <v-icon>mdi-bell</v-icon>
         </v-btn>
-      </router-link>
+        <router-link to="/Authentication">
+          <v-btn color="headerButton" fab small light>
+            <v-icon>mdi-account</v-icon>
+          </v-btn>
+        </router-link>
+      </v-col>
     </v-row>
-
     <div class="LBC"></div>
   </div>
 </template>
@@ -77,7 +83,7 @@ export default {
   data: () => ({
     CompanyModal: false,
     dialog: false,
-    langs: ["fr", "en"]
+    langs: ["fr", "en"],
   }),
 
   props: {},
@@ -91,8 +97,8 @@ export default {
     },
     emitCloseAdd(value) {
       this.dialog = value;
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -101,13 +107,27 @@ export default {
   background-color: #3b5998;
 }
 
-.rowHeader {
-  padding: 1%;
+.rowDisplayCenter {
+  text-align: center;
+}
+
+.rowDisplayRight {
+  text-align: right;
+  margin-right: 1%;
+}
+
+.logoButton {
+  width: 13vw;
+  height: 40px !important;
+  background-image: url(../assets/cdblogo_blank.png);
+  background-size: contain;
+  background-position: center;
 }
 
 .headerButton {
   margin: 1%;
-  background-color: white;
+  background-color: #f5f5f5;
+  color: #3b5998;
 }
 
 .LBC {
@@ -116,7 +136,8 @@ export default {
   left: 0;
   right: 0;
   overflow: hidden;
-  height: 150px;
+  height: 15vw;
+  max-height: 150px;
   width: auto;
   border-radius: 0 0 50% 50%/0 0 100% 100%;
 }
