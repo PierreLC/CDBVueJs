@@ -13,7 +13,14 @@
         <v-row justify="center">
           <v-dialog v-model="dialog" persistent>
             <template v-slot:activator="{ on, attrs }">
-              <v-btn class="addButton" outlined color="indigo" dark v-bind="attrs" v-on="on">
+              <v-btn
+                class="addButton"
+                outlined
+                color="indigo"
+                dark
+                v-bind="attrs"
+                v-on="on"
+              >
                 <v-icon>mdi-plus</v-icon>{{ $t("HEADER.ADD") }}
               </v-btn>
               <v-btn
@@ -54,65 +61,87 @@
                     </v-col>
                     <v-col cols="12" sm="6">
                       <v-container>
-                        <v-row>
-                          <v-menu
-                            ref="menu"
-                            v-model="menu"
-                            :close-on-content-click="false"
-                            transition="scale-transition"
-                            offset-y
-                            max-width="3000px"
-                            min-width="290px"
+                        <v-menu
+                          ref="menu"
+                          :return-value.sync="introducedDateFormatted"
+                          :close-on-content-click="false"
+                          transition="scale-transition"
+                          offset-y
+                          max-width="3000px"
+                          min-width="290px"
+                        >
+                          <template v-slot:activator="{ on, attrs }">
+                            <v-text-field
+                              readonly
+                              v-model="introducedDateFormatted"
+                              :allowed-dates="allowedDates"
+                              label="Introduced date"
+                              hint="YYYY-MM-DD format"
+                              v-bind="attrs"
+                              @blur="date = parseDate(introducedDateFormatted)"
+                              v-on="on"
+                            ></v-text-field>
+                          </template>
+                          <v-date-picker
+                            v-model="computer.introduced"
+                            @input="menu = false"
                           >
-                            <template v-slot:activator="{ on, attrs }">
-                              <v-text-field
-                                v-model="dateFormatted"
-                                label="Introduced date"
-                                hint="MM/DD/YYYY format"
-                                v-bind="attrs"
-                                @blur="date = parseDate(dateFormatted)"
-                                v-on="on"
-                              ></v-text-field>
-                            </template>
-                            <v-date-picker
-                              v-model="computer.introduced"
-                              no-title
-                              @input="menu = false"
-                            ></v-date-picker>
-                          </v-menu>
-                        </v-row>
+                            <v-spacer></v-spacer>
+                            <v-btn text color="primary" @click="menu = false"
+                              >Cancel</v-btn
+                            >
+                            <v-btn
+                              text
+                              color="primary"
+                              @click="$refs.menu.save(computer.introduced)"
+                              >OK</v-btn
+                            >
+                          </v-date-picker>
+                        </v-menu>
                       </v-container>
                     </v-col>
 
                     <v-col cols="12" sm="6">
                       <v-container>
-                        <v-row>
-                          <v-menu
-                            ref="menu"
-                            :close-on-content-click="false"
-                            transition="scale-transition"
-                            offset-y
-                            max-width="3000px"
-                            min-width="290px"
+                        <v-menu
+                          ref="menu2"
+                          :return-value.sync="discontinuedDateFormatted"
+                          :close-on-content-click="false"
+                          transition="scale-transition"
+                          offset-y
+                          max-width="3000px"
+                          min-width="290px"
+                        >
+                          <template v-slot:activator="{ on, attrs }">
+                            <v-text-field
+                              readonly
+                              v-model="discontinuedDateFormatted"
+                              :allowed-dates="allowedDates"
+                              label="Discontinued date"
+                              hint="YYYY-MM-DD format"
+                              v-bind="attrs"
+                              @blur="
+                                date = parseDate(discontinuedDateFormatted)
+                              "
+                              v-on="on"
+                            ></v-text-field>
+                          </template>
+                          <v-date-picker
+                            v-model="computer.discontinued"
+                            @input="menu2 = false"
                           >
-                            <template v-slot:activator="{ on, attrs }">
-                              <v-text-field
-                                v-model="dateFormatted"
-                                label="Discontinued date"
-                                hint="MM/DD/YYYY format"
-                                :allowed-dates="allowedDates"
-                                v-bind="attrs"
-                                @blur="date = parseDate(dateFormatted)"
-                                v-on="on"
-                              ></v-text-field>
-                            </template>
-                            <v-date-picker
-                              v-model="computer.discontinued"
-                              no-title
-                              @input="menu = false"
-                            ></v-date-picker>
-                          </v-menu>
-                        </v-row>
+                            <v-spacer></v-spacer>
+                            <v-btn text color="primary" @click="menu2 = false"
+                              >Cancel</v-btn
+                            >
+                            <v-btn
+                              text
+                              color="primary"
+                              @click="$refs.menu2.save(computer.discontinued)"
+                              >OK</v-btn
+                            >
+                          </v-date-picker>
+                        </v-menu>
                       </v-container>
                     </v-col>
                   </v-row>
@@ -135,7 +164,9 @@
         <div class="languagesDiv">
           <v-menu top offset-y>
             <template v-slot:activator="{ on, attrs }">
-              <v-icon  class="languagesButton" v-bind="attrs" v-on="on">mdi-earth</v-icon>
+              <v-icon class="languagesButton" v-bind="attrs" v-on="on"
+                >mdi-earth</v-icon
+              >
             </template>
 
             <v-list>
@@ -151,15 +182,11 @@
           </v-menu>
         </div>
 
-            <v-icon class="notificationsButton">mdi-bell</v-icon>
+        <v-icon class="notificationsButton">mdi-bell</v-icon>
 
-
-
-          <router-link to="/Authentication">
-
-              <v-icon class="logoutButton">mdi-account</v-icon>
-
-          </router-link>
+        <router-link to="/Authentication">
+          <v-icon class="logoutButton">mdi-account</v-icon>
+        </router-link>
       </v-toolbar>
     </v-card>
     <div class="LBC"></div>
@@ -186,8 +213,14 @@ export default {
       company: "",
     },
     date: new Date().toISOString().substr(0, 10),
-    dateFormatted: vm.formatDate(new Date().toISOString().substr(0, 10)),
+    introducedDateFormatted: vm.formatDate(
+      new Date().toISOString().substr(0, 10)
+    ),
+    discontinuedDateFormatted: vm.formatDate(
+      new Date().toISOString().substr(0, 10)
+    ),
     menu: false,
+    menu2: false,
     dialog: false,
   }),
   props: {},
@@ -198,9 +231,11 @@ export default {
     emitBoolClose(value) {
       this.CompanyModal = value;
     },
+
     addCompany() {
       console.log("toto");
     },
+
     addElement() {
       var company = { id: this.id, name: "" };
       const computer = {
@@ -211,32 +246,39 @@ export default {
       };
       computerApi.create(computer);
     },
+
     findCompanies() {
       var token = sessionStorage.getItem("token");
       companyApi.findAll(token).then((response) => {
         this.companies = response.data;
       });
     },
+
     formatDate(date) {
       if (!date) return null;
       const [year, month, day] = date.split("-");
       return `${month}/${day}/${year}`;
     },
+
     parseDate(date) {
       if (!date) return null;
       const [month, day, year] = date.split("/");
       return `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
     },
+
     changeLang(lang) {
       this.$i18n.locale = lang;
     },
   },
+
   computed: {
     computedDateFormatted() {
       return this.formatDate(this.date);
     },
+
     options: () => this.name,
   },
+
   mounted() {
     this.findCompanies();
   },
