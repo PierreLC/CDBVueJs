@@ -45,22 +45,28 @@ export default {
   name: "ComputerDetails",
   data: () => ({
     sheet: false,
-    dialog: false,
+    dialog: false
   }),
   components: { EditElement },
   props: { computer: Object },
-  methods: { deleteComputer() {
-    console.log(this.computer.id)
-    computerApi.deleteComputer(this.computer.id);
-    // this.dialog = false;
-  }, 
-  editComputer() {//TODO Call API
-  } }
+  methods: {
+    deleteComputer() {
+      computerApi.deleteComputer(this.computer.id);
+      // this.dialog = false;
+    },
+    editComputer() {
+      //TODO Call API
+    }
+  }
 };
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.elementPanel {
+  margin-top: 1vh;
+}
+
 .buttonContainer {
   text-align: right;
 }

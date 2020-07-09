@@ -11,11 +11,8 @@
             <v-card>
               <v-card-title class="headline">Voulez vous supprimer cette société ?</v-card-title>
               <v-card-actions>
-                <v-spacer></v-spacer>
-
-                <v-btn color="error" @click="dialog = false">Oui</v-btn>
-
-                <v-btn color="primary" @click="deleteCompany">Non</v-btn>
+                <v-btn color="error" @click="deleteCompany">Oui</v-btn>
+                <v-btn color="primary" @click="dialog = false">Non</v-btn>
               </v-card-actions>
             </v-card>
           </v-dialog>
@@ -35,7 +32,7 @@ export default {
   methods: {
     deleteCompany() {
       //TODO Call API
-      this.dialog = false
+      this.dialog = false;
     }
   }
 };
