@@ -15,7 +15,7 @@
             <template v-slot:activator="{ on, attrs }">
               <v-btn class="addButton" outlined v-bind="attrs" v-on="on">
                 <v-icon class="plusIcon">mdi-plus</v-icon>
-                <p class="addText">Add</p>
+                <p class="addText">{{ $t("HEADER.ADD") }}</p>
               </v-btn>
             </template>
             <v-card>
@@ -27,7 +27,7 @@
                       <v-text-field
                         label="Computer name*"
                         required
-                        hint="example of helper text only on focus"
+                        hint="Enter the name of the computer"
                         v-model="computer.name"
                       ></v-text-field>
                     </v-col>
@@ -45,7 +45,7 @@
                       <v-container>
                         <v-row>
                           <v-menu
-                            ref="menu1"
+                            ref="menu"
                             v-model="menu1"
                             :close-on-content-click="false"
                             transition="scale-transition"
@@ -78,7 +78,7 @@
                       <v-container>
                         <v-row>
                           <v-menu
-                            ref="menu1"
+                            ref="menu"
                             :close-on-content-click="false"
                             transition="scale-transition"
                             offset-y
@@ -98,7 +98,7 @@
                             <v-date-picker
                               v-model="computer.discontinued"
                               no-title
-                              @input="menu1 = false"
+                              @input="menu = false"
                             ></v-date-picker>
                           </v-menu>
                         </v-row>
@@ -211,7 +211,7 @@ export default {
       return `${month}/${day}/${year}`;
     },
 
-    allowedDates: (val) => parseInt(val.split("-")[2], 10) % 2 === 0,
+    allowedDate: (val) => parseInt(val.split("-")[2], 10) % 2 === 0,
 
     parseDate(date) {
       if (!date) return null;
