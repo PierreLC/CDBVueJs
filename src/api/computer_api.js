@@ -5,10 +5,10 @@ export default class ComputerApi {
     this.axios = axiosInstance;
   }
 
-  findAll(token, computerSreach) {
+  findAll(computerSreach) {
     return this.axios.get(
       "/computers?pageIterator=" +
-        computerSreach.pageIterator +
+        (computerSreach.pageIterator -1)+
         "&taillePage=" +
         computerSreach.taillePage +
         "&search=" +
@@ -17,12 +17,12 @@ export default class ComputerApi {
         computerSreach.order,
       {
         headers: {
-          authorization: "Bearer " + token,
+          authorization: "Bearer " + sessionStorage.getItem("token"),
         },
       }
     );
   }
-  
+
   create(computerDTO) {
     return this.axios.post("/computers", computerDTO, {
       headers: {
@@ -34,6 +34,12 @@ export default class ComputerApi {
 
   delete(id) {
     return this.axios.delete("/computers/" + id, {
+      headers: { authorization: "Bearer " + sessionStorage.getItem("token") },
+    });
+  }
+
+  deleteMulti() {
+    return this.axios.delete("/computers", {
       headers: { authorization: "Bearer " + sessionStorage.getItem("token") },
     });
   }
