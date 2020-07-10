@@ -12,6 +12,17 @@ import ListElements from "@/components/ListElements.vue";
 
 export default {
   name: "Dashboard",
-  components: { Header, ListElements }
+  components: { Header, ListElements },
+  methods: {
+    logout() {
+      if (!sessionStorage.getItem("token")) {
+        sessionStorage.removeItem("token");
+        this.$router.push("/");
+      }
+    }
+  },
+  mounted() {
+    this.logout();
+  }
 };
 </script>
