@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div>{{ $t("EDIT.COMPUTER") }}</div>
+    <div>{{ $t("EDIT.EDIT-COMPUTER") }}</div>
     <div>
       <v-card ref="addComputerForm">
         <v-card-title></v-card-title>
@@ -67,9 +67,9 @@
                       @input="menu = false"
                     >
                       <v-spacer></v-spacer>
-                      <v-btn text color="primary" @click="menu = !menu">{{
+                      <!-- <v-btn text color="primary" @click="menu = !menu">{{
                         $t("COMMONS.CANCEL")
-                      }}</v-btn>
+                      }}</v-btn> -->
                       <v-btn
                         text
                         color="primary"
@@ -102,7 +102,7 @@
                         :rules="[
                           () =>
                             computer.discontinued > computer.introduced ||
-                            'Discontinued date must be after introudced date',
+                            'Discontinued date must be after introduced date',
                         ]"
                         hint="YYYY-MM-DD format"
                         v-bind="attrs"
@@ -115,9 +115,9 @@
                       @input="menu2 = false"
                     >
                       <v-spacer></v-spacer>
-                      <v-btn text color="primary" @click="menu2 = !menu2">{{
+                      <!-- <v-btn text color="primary" @click="menu2 = !menu2">{{
                         $t("COMMONS.CANCEL")
-                      }}</v-btn>
+                      }}</v-btn> -->
                       <v-btn
                         text
                         color="primary"
@@ -154,7 +154,7 @@
             </v-tooltip>
           </v-slide-x-reverse-transition>
           <v-btn color="blue darken-1" text @click="editComputer">{{
-            $t("COMMONS.SAVE")
+            $t("DETAILS.EDIT")
           }}</v-btn>
         </v-card-actions>
       </v-card>

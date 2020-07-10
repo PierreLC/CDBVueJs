@@ -8,7 +8,7 @@
           item-text="name"
           filled
           :label="$t('LIST.LABEL-CATEGORIES')"
-          @change="changecategorie($event)"
+          @change="changeCategorie($event)"
           v-model="category"
           class="topcardElements"
         ></v-select>
@@ -38,15 +38,28 @@
       </v-row>
       <div>
         <v-btn
-          v-if="responceStatus !== ''"
+          v-if="responceStatus !== '' && isUrlInclude('/computers')"
           color="primary"
           @click="search"
           class="searchButton"
-                    :disabled="isButtonClicked"
-
+          :disabled="isButtonClicked"
         >{{ $t("LIST.SEARCH") }} ({{numberElement}} {{ $t("LIST.RESULTS") }})</v-btn>
-        <v-btn v-else color="primary" @click="search" class="searchButton" :disabled="isButtonClicked">{{ $t("LIST.SEARCH") }}</v-btn>
-       
+        <v-btn
+          v-else-if="responceStatus !== '' && isUrlInclude('/companies')"
+          color="primary"
+          @click="search"
+          class="searchButton"
+          :disabled="isButtonClicked"
+        >{{ $t("LIST.SEARCH") }} ({{numberCompany}} {{ $t("LIST.RESULTS") }})</v-btn>
+
+        <v-btn
+          v-else
+          color="primary"
+          @click="search"
+          class="searchButton"
+          :disabled="isButtonClicked"
+        >{{ $t("LIST.SEARCH") }}</v-btn>
+
         <v-btn
           small
           @click="isDeleteRequired = !isDeleteRequired"
@@ -81,23 +94,36 @@
         <div v-for="(element, i) in elements" :key="i">
           <v-row justify="center" align="center" class="checkboxRow">
             <v-checkbox v-model="multiDelete" :value="element.id" v-if="isDeleteRequired"></v-checkbox>
-            <ComputerDetails v-bind:computer="element" @clickRefresh="search" @computerId="deleteComputer($event)"/>
+            <ComputerDetails
+              v-bind:computer="element"
+              @clickRefresh="search"
+              @computerId="deleteComputer($event)"
+            />
           </v-row>
         </div>
       </div>
       <div v-else-if="isUrlInclude('/companies')">
-        <CompanyDetails v-for="(element, i) in elements" :key="i" v-bind:company="element" />
+        <CompanyDetails
+          v-for="(element, i) in elements"
+          :key="i"
+          v-bind:company="element"
+          @companyId="deleteCompany($event)"
+        />
       </div>
       <div v-else>{{ $t("ERRORS.NOTHING-FOUND") }}</div>
     </div>
     <div v-else-if="isSearching" class="spinner">
       <v-progress-circular :size="70" :width="7" color="primary" indeterminate></v-progress-circular>
     </div>
-    <v-alert v-else-if="isAlertDisplay === true" type="warning" class="alert">{{ $t("ERRORS.INVALID-SEARCH") }}</v-alert>
+    <v-alert
+      v-else-if="isAlertDisplay === true"
+      type="warning"
+      class="alert"
+    >{{ $t("ERRORS.INVALID-SEARCH") }}</v-alert>
     <v-alert v-else-if="isErrorAlertDisplay === true" type="error" class="alert">{{messageError}}</v-alert>
 
     <v-snackbar v-model="isSnackbar">
-      Erreur de suppression
+      delete succeed
       <template v-slot:action="{ attrs }">
         <v-btn text v-bind="attrs" @click="isSnackbar = false">Ok</v-btn>
       </template>
@@ -135,7 +161,7 @@ export default {
       order: ""
     },
     dropdown_category: [
-      { id: "0", name: "Ordinateurs"},
+      { id: "0", name: "Ordinateurs" },
       { id: "1", name: "Société" }
     ],
     dropdown_numberelement: ["10", "20", "50", "100"]
@@ -160,8 +186,12 @@ export default {
         this.isButtonClicked = false;
       }
     },
-    deleteComputer(computerId){
+    deleteComputer(computerId) {
       computerApi.delete(computerId);
+      this.search();
+    },
+    deleteCompany(companyId) {
+      companyApi.delete(companyId);
       this.search();
     },
     searchComputer() {
@@ -241,6 +271,9 @@ export default {
         this.DefaultPage();
         return 0;
       }
+    },
+    numberCompany() {
+      return this.elements.length;
     }
   },
   mounted() {}

@@ -1,7 +1,6 @@
 <template>
   <div>
     <v-card ref="addComputerForm">
-      <v-card-title></v-card-title>
       <v-card-text>
         <v-container>
           <v-row>

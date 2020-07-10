@@ -23,11 +23,8 @@
               <v-card-title class="headline">{{ $t("DETAILS.DELETE-QUESTION") }}</v-card-title>
               <v-card-actions>
                 <v-spacer></v-spacer>
-
                 <v-btn color="primary" @click="dialog = false">{{ $t("COMMONS.NO") }}</v-btn>
-
                 <v-btn color="error" @click="deleteComputer(), dialog=false">{{ $t("COMMONS.YES") }}</v-btn>
-
               </v-card-actions>
             </v-card>
           </v-dialog>

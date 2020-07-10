@@ -19,6 +19,12 @@ export default class CompanyApi {
       },
     });
   }
+
+  delete(id) {
+    return this.axios.delete("/companies/" + id, {
+      headers: { authorization: "Bearer " + sessionStorage.getItem("token") },
+    });
+  }
 }
 
 export const companyApi = new CompanyApi(axios);

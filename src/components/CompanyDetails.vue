@@ -6,7 +6,11 @@
       </v-expansion-panel-header>
       <v-expansion-panel-content>
         <div class="buttonContainer">
-          <v-btn color="error" class="bottomButton" @click="dialog = true">{{ $t("DETAILS.DELETE") }}</v-btn>
+          <v-btn
+            color="error"
+            class="bottomButton"
+            @click="dialog = true"
+          >{{ $t("DETAILS.DELETE") }}</v-btn>
           <v-dialog v-model="dialog" max-width="300">
             <v-card>
               <v-card-title class="headline">{{ $t("DETAILS.DELETE-QUESTION-COMPANY") }}</v-card-title>
@@ -31,7 +35,7 @@ export default {
   props: { company: Object },
   methods: {
     deleteCompany() {
-      //TODO Call API
+      this.$emit("companyId", this.company.id);
       this.dialog = false;
     }
   }
