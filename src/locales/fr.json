@@ -1,0 +1,59 @@
+{
+  "LOGIN": {
+    "LOGIN-FORM": "Formulaire de connexion",
+    "SOURCE": "Source",
+    "LOGIN": "Connexion",
+    "USERNAME": "Identifiant",
+    "PASSWORD": "Mot de passe"
+  },
+  "HEADER": {
+    "TITLE": "Accueil",
+    "ADD-COMPUTER": "Ajouter un ordinateur",
+    "ADD-COMPANY": "Ajouter une société",
+    "NOTIFICATIONS": "Notifications",
+    "LANGUAGE": "Langage",
+    "LOGOUT": "Déconnexion"
+  },
+  "DETAILS": {
+    "EDIT": "Éditer",
+    "CLOSE": "Fermer",
+    "DELETE": "Supprimer",
+    "DELETE-QUESTION": "Voulez-vous supprimer cet ordinateur ?",
+    "DELETE-QUESTION-COMPANY": "Voulez-vous supprimer cette société ?"
+  },
+  "LIST": {
+    "SEARCH": "Rechercher",
+    "RESULTS": "résultats",
+    "LABEL-CATEGORIES": "Catégories",
+    "LABEL-SEARCH": "Recherche",
+    "LABEL-NUMBER": "Nombre d'éléments"
+  },
+  "ADD": {
+    "HINT-NAME": "Veuillez saisir le nom de l'ordinateur",
+    "HINT-DATE": "Au format YYYY-MM-DD",
+    "FIELD-NAME": "Nom de l'ordinateur*",
+    "FIELD-COMPANY": "Société*",
+    "FIELD-INTRODUCED": "Date de mise sur le marché*",
+    "FIELD-DISCONTINUED": "Date de retrait du marché*",
+    "REQUIRED": "*veuillez remplir les champs obligatoires"
+  },
+  "EDIT": {
+    "EDIT-COMPUTER": "Modifier l'ordinateur"
+  },
+  "ERRORS": {
+    "NOTHING-FOUND": "Aucun résultat", 
+    "INVALID-SEARCH": "Recherche invalide",
+    "ALERT": "Je suis un message d'alerte !"
+  },
+  "COMMONS": {
+    "NAME": "Nom",
+    "INTRODUCED": "Mise sur le marché",
+    "DISCONTINUED": "Retrait du marché",
+    "COMPANY": "Société",
+    "SAVE": "Sauvegarder",
+    "NO": "Non",
+    "YES": "Oui",
+    "CANCEL": "Annuler",
+    "OK": "Ok"
+  }
+}
