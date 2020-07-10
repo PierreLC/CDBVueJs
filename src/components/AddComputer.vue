@@ -197,7 +197,6 @@ export default {
         discontinued: this.computer.discontinued,
         company: company,
       };
-      console.log(this.submit())
       if (this.submit()) {
         computerApi.create(computer).then(this.emitCloseAdd());
       }
@@ -227,6 +226,7 @@ export default {
       this.introducedDateFormatted = "";
       this.discontinuedDateFormatted = "";
     },
+
     submit() {
       // this.formHasErrors = false;
 
@@ -234,9 +234,6 @@ export default {
       //   if (!this.form[f]) this.formHasErrors = true;
       //   this.$refs[f].validate(true);
       // });
-      // console.log(this.computer.name);
-      // console.log(this.introducedDateFormatted <= this.discontinuedDateFormatted);
-      // console.log(this.id);
 
       return (
         this.computer.name &&
