@@ -12,11 +12,11 @@
 
         <v-row justify="center">
           <v-btn outlined color="indigo" dark @click="dialog = !dialog">
-            <v-icon>mdi-plus</v-icon>{{ $t("HEADER.ADD") }}
+            <v-icon>mdi-plus</v-icon>{{ $t("HEADER.ADD-COMPUTER") }}
           </v-btn>
           <v-dialog v-model="dialog" persistent>
             <v-card>
-              <AddElement @clickCloseAdd="emitCloseAdd" />
+              <AddComputer @clickCloseAdd="emitCloseAdd" />
             </v-card>
           </v-dialog>
           <v-btn
@@ -25,7 +25,7 @@
             dark
             @click="CompanyModal = !CompanyModal"
           >
-            <v-icon>mdi-plus</v-icon>Add Company
+            <v-icon>mdi-plus</v-icon>{{ $t("HEADER.ADD-COMPANY") }}
           </v-btn>
           <v-dialog v-model="CompanyModal" persistent>
             <v-card>
@@ -62,13 +62,13 @@
         </router-link>
       </v-toolbar>
     </v-card>
-    <div class="LBC"></div>
+    <div class="roundedDiv"></div>
   </div>
 </template>
 
 <script>
 import AddCompany from "./AddCompany";
-import AddElement from "./AddElement";
+import AddComputer from "./AddComputer";
 
 export default {
   name: "Header",
@@ -80,10 +80,10 @@ export default {
   }),
 
   props: {},
-  components: { AddCompany, AddElement },
+  components: { AddCompany, AddComputer },
   methods: {
-    changeLang(index) {
-      this.locale = this.languages[index].locale;
+    changeLang(lang) {
+      this.$i18n.locale = lang;
     },
     emitBoolClose(value) {
       this.CompanyModal = value;
@@ -101,7 +101,7 @@ export default {
   text-align: center;
 }
 
-.LBC {
+.roundedDiv {
   position: relative;
   background-color: #3b5998;
   left: 0;

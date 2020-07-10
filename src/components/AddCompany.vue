@@ -8,10 +8,14 @@
         v-model="company.name"
       ></v-text-field>
     </v-col>
-    <v-btn color="blue darken-1" text @click="emitBoolClose">Close</v-btn>
+    <div class="rightButtons">
+    <v-btn color="blue darken-1" text @click="emitBoolClose">{{
+      $t("DETAILS.CLOSE")
+    }}</v-btn>
     <v-btn color="blue darken-1" text @click="addCompany()">
-      Save
+      {{ $t("DETAILS.EDIT") }}
     </v-btn>
+    </div>
   </div>
 </template>
 
@@ -39,4 +43,5 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped></style>
+<style scoped> 
+</style>

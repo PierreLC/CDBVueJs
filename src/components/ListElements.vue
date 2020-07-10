@@ -7,7 +7,7 @@
           item-value="id"
           item-text="name"
           filled
-          label="Catégories"
+          :label="$t('LIST.LABEL-CATEGORIES')"
           @change="changecategorie($event)"
           v-model="category"
           class="topcardElements"
@@ -16,24 +16,24 @@
           v-if="category !== '1'"
           v-model="elementSearch.search"
           @keydown.enter="search"
-          label="Recherche"
+          :label="$t('LIST.LABEL-SEARCH')"
           clearable
         ></v-text-field>
         <v-select
           v-if="category !== '1'"
           :items="dropdown_numberelement"
           filled
-          label="Nombre d'éléments"
+          :label="$t('LIST.LABEL-NUMBER')"
           v-model="elementSearch.taillePage"
           class="topcardElements"
         ></v-select>
       </v-row>
       <v-row justify="center" align="center" v-if="category === '0'">
         <v-chip-group active-class="primary--text" v-model="elementSearch.order">
-          <v-chip value="name">Nom</v-chip>
-          <v-chip value="introduced">Date de mise en service</v-chip>
-          <v-chip value="discontinued">Date de fin de serivce</v-chip>
-          <v-chip value="company">Société</v-chip>
+          <v-chip value="name">{{ $t("COMMONS.NAME") }}</v-chip>
+          <v-chip value="introduced">{{ $t("COMMONS.INTRODUCED") }}</v-chip>
+          <v-chip value="discontinued">{{ $t("COMMONS.DISCONTINUED") }}</v-chip>
+          <v-chip value="company">{{ $t("COMMONS.COMPANY") }}</v-chip>
         </v-chip-group>
       </v-row>
       <div>
@@ -42,8 +42,8 @@
           color="primary"
           @click="search"
           class="searchButton"
-        >Rechercher ({{numberElement}} Resultats)</v-btn>
-        <v-btn v-else color="primary" @click="search" class="searchButton">Rechercher</v-btn>
+        >{{ $t("LIST.SEARCH") }} ({{numberElement}} {{ $t("LIST.RESULTS") }})</v-btn>
+        <v-btn v-else color="primary" @click="search" class="searchButton">{{ $t("LIST.SEARCH") }}</v-btn>
       </div>
     </v-card>
 
@@ -59,19 +59,19 @@
         <div v-for="(element, i) in elements" :key="i">
           <v-row justify="center" align="center" class="checkboxRow">
             <v-checkbox v-model="multiDelete" :value="element.id" v-if="isDeleteRequired"></v-checkbox>
-            <ComputerDetails v-bind:computer="element" @clickRefresh="search"/>
+            <ComputerDetails v-bind:computer="element" @clickRefresh="search" @computerId="deleteComputer"/>
           </v-row>
         </div>
       </div>
       <div v-else-if="isUrlInclude('/companies')">
         <CompanyDetails v-for="(element, i) in elements" :key="i" v-bind:company="element" />
       </div>
-      <div v-else>Errer rien trouvé</div>
+      <div v-else>{{ $t("ERRORS.NOTHING-FOUND") }}</div>
     </div>
     <div v-else-if="isSearching" class="spinner">
       <v-progress-circular :size="70" :width="7" color="primary" indeterminate></v-progress-circular>
     </div>
-    <v-alert v-else-if="isAlertDisplay === true" type="warning" class="alert">Recherche invalide</v-alert>
+    <v-alert v-else-if="isAlertDisplay === true" type="warning" class="alert">{{ $t("ERRORS.INVALID-SEARCH") }}</v-alert>
     <v-alert v-else-if="isErrorAlertDisplay === true" type="error" class="alert">{{messageError}}</v-alert>
   </div>
 </template>
@@ -103,7 +103,7 @@ export default {
       order: ""
     },
     dropdown_category: [
-      { id: "0", name: "Ordinateur" },
+      { id: "0", name: "Ordinateurs"},
       { id: "1", name: "Société" }
     ],
     dropdown_numberelement: ["10", "20", "50", "100"]
@@ -123,6 +123,10 @@ export default {
         this.isAlertDisplay = true;
         this.isSearching = false;
       }
+    },
+    deleteComputer(){
+      computerApi.delete(this.$refs.computerId);
+      this.search();
     },
     searchComputer() {
       var token = sessionStorage.getItem("token");
@@ -171,7 +175,7 @@ export default {
     },
     DefaultPage() {
       this.actualPage = 0;
-    }
+    },
   },
   computed: {
     numberPage() {

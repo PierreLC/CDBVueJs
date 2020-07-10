@@ -6,20 +6,20 @@
           <v-col cols="12" sm="8" md="4">
             <v-card class="elevation-12">
               <v-toolbar color="primary" dark flat>
-                <v-toolbar-title>Login form</v-toolbar-title>
+                <v-toolbar-title>{{ $t("LOGIN.LOGIN-FORM") }}</v-toolbar-title>
 
                 <v-tooltip bottom>
-                  <span>Source</span>
+                  <span>{{ $t("LOGIN.SOURCE") }}</span>
                 </v-tooltip>
               </v-toolbar>
               <v-alert type="error" v-show="visible">
-                I'm an error alert.
+                {{ $t("ERRORS.ALERT") }}
               </v-alert>
               <v-card-text>
                 <v-form>
                   <v-text-field
                     v-model="username"
-                    label="Login"
+                    :label="$t('LOGIN.USERNAME')"
                     name="login"
                     prepend-icon="mdi-account"
                     type="text"
@@ -28,7 +28,7 @@
                   <v-text-field
                     v-model="userpassword"
                     id="password"
-                    label="Password"
+                    :label="$t('LOGIN.PASSWORD')"
                     name="password"
                     prepend-icon="mdi-lock"
                     type="password"
@@ -37,7 +37,7 @@
               </v-card-text>
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="primary" @click="loginMethod()">Login</v-btn>
+                <v-btn color="primary" @click="loginMethod()">{{ $t("LOGIN.LOGIN") }}</v-btn>
               </v-card-actions>
             </v-card>
           </v-col>
