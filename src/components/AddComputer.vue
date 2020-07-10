@@ -225,6 +225,8 @@ export default {
       this.id = 0;
       this.introducedDateFormatted = "";
       this.discontinuedDateFormatted = "";
+      this.computer.introduced = "";
+      this.computer.discontinued = "";
     },
 
     submit() {
@@ -234,11 +236,11 @@ export default {
       //   if (!this.form[f]) this.formHasErrors = true;
       //   this.$refs[f].validate(true);
       // });
-      
+
       return (
         this.computer.name &&
-        (this.computer.introduced <=  this.computer.discontinued) &&
-        (this.id > 0)
+        this.computer.introduced < this.computer.discontinued &&
+        this.id > 0
       );
     },
   },

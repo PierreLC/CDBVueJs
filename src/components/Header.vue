@@ -2,7 +2,6 @@
   <div class="mainElement">
     <v-row align="center" justify="center">
       <v-col class="rowDisplayCenter">
-        
         <router-link to="/Dashboard" v-if="token">
           <v-btn class="headerButton logoButton"></v-btn>
         </router-link>
@@ -63,11 +62,10 @@
         <v-btn color="headerButton" fab small light>
           <v-icon>mdi-bell</v-icon>
         </v-btn>
-        <router-link to="/">
-          <v-btn color="headerButton" fab small light>
-            <v-icon>mdi-account</v-icon>
-          </v-btn>
-        </router-link>
+
+        <v-btn color="headerButton" @click="logout" fab small light>
+          <v-icon>mdi-account</v-icon>
+        </v-btn>
       </v-col>
     </v-row>
     <div class="roundedDiv"></div>
@@ -100,6 +98,12 @@ export default {
     },
     emitCloseAdd(value) {
       this.dialog = value;
+    },
+    logout() {
+      sessionStorage.removeItem("token");
+      if (this.$router.currentRoute.name != "Authentication") {
+        this.$router.push("/");
+      }
     }
   },
   mounted() {

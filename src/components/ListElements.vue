@@ -96,7 +96,7 @@
     <v-alert v-else-if="isAlertDisplay === true" type="warning" class="alert">{{ $t("ERRORS.INVALID-SEARCH") }}</v-alert>
     <v-alert v-else-if="isErrorAlertDisplay === true" type="error" class="alert">{{messageError}}</v-alert>
 
-    <v-snackbar v-model="snackbar">
+    <v-snackbar v-model="isSnackbar">
       Erreur de suppression
       <template v-slot:action="{ attrs }">
         <v-btn text v-bind="attrs" @click="isSnackbar = false">Ok</v-btn>
