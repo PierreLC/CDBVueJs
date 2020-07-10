@@ -63,9 +63,9 @@
                     @input="menu = false"
                   >
                     <v-spacer></v-spacer>
-                    <v-btn text color="primary" @click="menu = !menu">{{
+                    <!-- <v-btn text color="primary" @click="menu = !menu">{{
                       $t("COMMONS.CANCEL")
-                    }}</v-btn>
+                    }}</v-btn> -->
                     <v-btn
                       text
                       color="primary"
@@ -110,9 +110,9 @@
                     @input="menu2 = false"
                   >
                     <v-spacer></v-spacer>
-                    <v-btn text color="primary" @click="menu2 = !menu2">{{
+                    <!-- <v-btn text color="primary" @click="menu2 = !menu2">{{
                       $t("COMMONS.CANCEL")
-                    }}</v-btn>
+                    }}</v-btn> -->
                     <v-btn
                       text
                       color="primary"
@@ -173,7 +173,7 @@ export default {
     name: null,
     errorMessages: "",
     computer: {
-      name: "",
+      name: null,
       introduced: "",
       discontinue: "",
       company: "",
@@ -197,13 +197,10 @@ export default {
         discontinued: this.computer.discontinued,
         company: company,
       };
-
-      // this.submit();
-      // if (this.validate) {
-        computerApi
-          .create(computer)
-          .then(this.emitCloseAdd());
-      // }
+      console.log(this.submit())
+      if (this.submit()) {
+        computerApi.create(computer).then(this.emitCloseAdd());
+      }
     },
     findCompanies() {
       var token = sessionStorage.getItem("token");
@@ -230,14 +227,23 @@ export default {
       this.introducedDateFormatted = "";
       this.discontinuedDateFormatted = "";
     },
-    // submit() {
-    //   this.formHasErrors = false;
+    submit() {
+      // this.formHasErrors = false;
 
-    //   Object.keys(this.form).forEach((f) => {
-    //     if (!this.form[f]) this.formHasErrors = true;
-    //     this.$refs[f].validate(true);
-    //   });
-    // },
+      // Object.keys(this.form).forEach((f) => {
+      //   if (!this.form[f]) this.formHasErrors = true;
+      //   this.$refs[f].validate(true);
+      // });
+      // console.log(this.computer.name);
+      // console.log(this.introducedDateFormatted <= this.discontinuedDateFormatted);
+      // console.log(this.id);
+
+      return (
+        this.computer.name &&
+        (this.introducedDateFormatted <= this.discontinuedDateFormatted) &&
+        (this.id > 0)
+      );
+    },
   },
   computed: {
     computedDateFormatted() {
