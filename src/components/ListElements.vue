@@ -152,6 +152,7 @@ export default {
       this.isAlertDisplay = false;
       this.isErrorAlertDisplay = true;
       this.isButtonClicked = true;
+      this.isDeleteRequired = false;
       this.multiDelete = [];
       if (this.category == "0") {
         this.searchComputer();
