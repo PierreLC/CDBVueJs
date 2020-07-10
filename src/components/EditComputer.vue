@@ -134,7 +134,7 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" text @click="emitCloseAdd">{{
+          <v-btn color="blue darken-1" text @click="emitCloseEdit">{{
             $t("DETAILS.CLOSE")
           }}</v-btn>
           <v-slide-x-reverse-transition>
@@ -207,7 +207,7 @@ export default {
       };
 
     
-      computerApi.edit(computer).then(this.emitCloseAdd());
+      computerApi.edit(computer).then(this.emitCloseEdit());
     },
     findCompanies() {
       var token = sessionStorage.getItem("token");
@@ -225,8 +225,8 @@ export default {
       const [month, day, year] = date.split("/");
       return `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
     },
-    emitCloseAdd() {
-      this.$emit("clickCloseAdd", false).then(this.clearFields());
+    emitCloseEdit() {
+      this.$emit("clickCloseEdit", false);
     },
     clearFields() {
       this.computer.name = "";

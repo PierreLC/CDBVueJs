@@ -13,9 +13,8 @@
         <div class="buttonContainer">
           <v-btn color="primary" @click="sheet = !sheet" class="bottomButton">{{ $t("DETAILS.EDIT") }}</v-btn>
           <v-dialog v-model="sheet">
-            <v-sheet class="text-center" height="200px">
-              <v-btn color="red" @click="sheet = !sheet">{{ $t("DETAILS.CLOSE") }}</v-btn>
-              <EditComputer style="editelement" v-bind:computerToEdit="computer" />
+            <v-sheet class="text-center">
+              <EditComputer style="editelement" v-bind:computerToEdit="computer" @clickCloseEdit="emitCloseEdit"/>
             </v-sheet>
           </v-dialog>
           <v-btn color="error" class="bottomButton" @click="dialog = true">{{ $t("DETAILS.DELETE") }}</v-btn>
@@ -52,6 +51,9 @@ export default {
   methods: {
     deleteComputer() {
       this.$emit('computerId', this.computer.id);
+    },
+    emitCloseEdit(value){
+      this.sheet=value;
     }
   }
 };
