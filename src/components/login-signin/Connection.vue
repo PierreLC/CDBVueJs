@@ -58,7 +58,8 @@ export default {
   props: {},
   methods: {
     loginMethod() {
-      userApi.login(this.username, this.userpassword).then((response) => {
+      const password = this.CryptoJS.SHA256(this.userpassword);
+      userApi.login(this.username,password.toString(this.CryptoJS.enc.Base64)).then((response) => {
         let token = "token";
         sessionStorage.setItem(token, response.data);
         this.$router.push({name: "Dashboard", query: { redirect:'/path'}})

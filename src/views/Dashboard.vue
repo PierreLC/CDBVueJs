@@ -1,6 +1,7 @@
 <template>
   <div>
     <Header />
+    <v-spacer style="margin-top: 10vh;"></v-spacer>
     <ListElements />
   </div>
 </template>
