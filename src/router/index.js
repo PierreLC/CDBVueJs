@@ -16,12 +16,7 @@ const routes = [
     path: '/Dashboard',
     name: 'Dashboard',
     component: Dashboard
-  },
-  {
-    path: '/authentication',
-    name: 'Authentication',
-    component: Authentication
-  },
+  }
 ]
 
 const router = new VueRouter({
