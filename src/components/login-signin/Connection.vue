@@ -12,9 +12,7 @@
                   <span>Source</span>
                 </v-tooltip>
               </v-toolbar>
-              <v-alert type="error" v-show="visible">
-                I'm an error alert.
-              </v-alert>
+              <v-alert type="error" v-show="visible">I'm an error alert.</v-alert>
               <v-card-text>
                 <v-form>
                   <v-text-field
@@ -52,20 +50,27 @@ import { userApi } from "../../api/user_api";
 
 export default {
   name: "Connection",
-  visible: false,
-  username: "",
-  userpassword: "",
+  data: () => ({
+    visible: false,
+    username: "",
+    userpassword: ""
+  }),
   props: {},
   methods: {
     loginMethod() {
       const password = this.CryptoJS.SHA256(this.userpassword);
-      userApi.login(this.username,password.toString(this.CryptoJS.enc.Base64)).then((response) => {
-        let token = "token";
-        sessionStorage.setItem(token, response.data);
-        this.$router.push({name: "Dashboard", query: { redirect:'/path'}})
-      });
-    },
-  },
+      userApi
+        .login(this.username, password.toString(this.CryptoJS.enc.Base64))
+        .then(response => {
+          let token = "token";
+          sessionStorage.setItem(token, response.data);
+          this.$router.push({
+            name: "Dashboard",
+            query: { redirect: "/path" }
+          });
+        });
+    }
+  }
 };
 </script>
 
