@@ -6,13 +6,13 @@
       </v-expansion-panel-header>
       <v-expansion-panel-content>
         <div class="buttonContainer">
-          <v-btn color="error" class="bottomButton" @click="dialog = true">Supprimer</v-btn>
+          <v-btn color="error" class="bottomButton" @click="dialog = true">{{ $t("DETAILS.DELETE") }}</v-btn>
           <v-dialog v-model="dialog" max-width="300">
             <v-card>
-              <v-card-title class="headline">Voulez vous supprimer cette société ?</v-card-title>
+              <v-card-title class="headline">{{ $t("DETAILS.DELETE-QUESTION-COMPANY") }}</v-card-title>
               <v-card-actions>
-                <v-btn color="error" @click="deleteCompany">Oui</v-btn>
-                <v-btn color="primary" @click="dialog = false">Non</v-btn>
+                <v-btn color="error" @click="deleteCompany">{{ $t("COMMONS.YES") }}</v-btn>
+                <v-btn color="primary" @click="dialog = false">{{ $t("COMMONS.NO") }}</v-btn>
               </v-card-actions>
             </v-card>
           </v-dialog>

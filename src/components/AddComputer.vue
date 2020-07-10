@@ -1,21 +1,34 @@
 <template>
   <div>
-    <v-card>
+    <v-card ref="addComputerForm">
       <v-card-title></v-card-title>
       <v-card-text>
         <v-container>
           <v-row>
             <v-col cols="12" sm="6" md="4">
               <v-text-field
-                label="Computer name*"
-                required
-                hint="Please enter the name of the computer"
+                ref="name"
                 v-model="computer.name"
+                :rules="[
+                  () => !!computer.name || 'this field is required',
+                  () =>
+                    computer.name.length <= 255 ||
+                    'this field must be less than 255 characters',
+                ]"
+                :error-messages="errorMessages"
+                :label="$t('ADD.FIELD-NAME')"
+                :hint="$t('ADD.HINT-NAME')"
+                required
+                clearable
               ></v-text-field>
             </v-col>
             <v-col cols="12" sm="6" md="4">
               <v-autocomplete
-                label="Companies*"
+                ref="company"
+                :label="$t('ADD.FIELD-COMPANY')"
+                required
+                clearable
+                :rules="[() => !!company || 'this field is required']"
                 v-model="id"
                 :items="companies"
                 item-value="id"
@@ -38,8 +51,8 @@
                       readonly
                       v-model="introducedDateFormatted"
                       :allowed-dates="allowedDates"
-                      label="Introduced date"
-                      hint="YYYY-MM-DD format"
+                      :label="$t('ADD.FIELD-INTRODUCED')"
+                      :hint="$t('ADD.HINT-DATE')"
                       v-bind="attrs"
                       @blur="date = parseDate(introducedDateFormatted)"
                       v-on="on"
@@ -50,14 +63,14 @@
                     @input="menu = false"
                   >
                     <v-spacer></v-spacer>
-                    <v-btn text color="primary" @click="menu = false"
-                      >Cancel</v-btn
-                    >
+                    <!-- <v-btn text color="primary" @click="menu = !menu">{{
+                      $t("COMMONS.CANCEL")
+                    }}</v-btn> -->
                     <v-btn
                       text
                       color="primary"
                       @click="$refs.menu.save(computer.introduced)"
-                      >OK</v-btn
+                      >{{ $t("COMMONS.OK") }}</v-btn
                     >
                   </v-date-picker>
                 </v-menu>
@@ -80,7 +93,12 @@
                       readonly
                       v-model="discontinuedDateFormatted"
                       :allowed-dates="allowedDates"
-                      label="Discontinued date"
+                      :label="$t('ADD.FIELD-DISCONTINUED')"
+                      :rules="[
+                        () =>
+                          computer.discontinued > computer.introduced ||
+                          'Discontinued date must be after introudced date',
+                      ]"
                       hint="YYYY-MM-DD format"
                       v-bind="attrs"
                       @blur="date = parseDate(discontinuedDateFormatted)"
@@ -92,14 +110,14 @@
                     @input="menu2 = false"
                   >
                     <v-spacer></v-spacer>
-                    <v-btn text color="primary" @click="menu2 = false"
-                      >Cancel</v-btn
-                    >
+                    <!-- <v-btn text color="primary" @click="menu2 = !menu2">{{
+                      $t("COMMONS.CANCEL")
+                    }}</v-btn> -->
                     <v-btn
                       text
                       color="primary"
                       @click="$refs.menu2.save(computer.discontinued)"
-                      >OK</v-btn
+                      >{{ $t("COMMONS.OK") }}</v-btn
                     >
                   </v-date-picker>
                 </v-menu>
@@ -107,12 +125,32 @@
             </v-col>
           </v-row>
         </v-container>
-        <small>*indicates required field</small>
+        <small>{{ $t("ADD.REQUIRED") }}</small>
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" text @click="emitCloseAdd">Close</v-btn>
-        <v-btn color="blue darken-1" text @click="addElement()">Save</v-btn>
+        <v-btn color="blue darken-1" text @click="emitCloseAdd">{{
+          $t("DETAILS.CLOSE")
+        }}</v-btn>
+        <v-slide-x-reverse-transition>
+          <v-tooltip v-if="formHasErrors" left>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn
+                icon
+                class="refreshButton"
+                v-bind="attrs"
+                @click="clearFields"
+                v-on="on"
+              >
+                <v-icon>mdi-refresh</v-icon>
+              </v-btn>
+            </template>
+            <span>Refresh form</span>
+          </v-tooltip>
+        </v-slide-x-reverse-transition>
+        <v-btn color="blue darken-1" text @click="addComputer">{{
+          $t("COMMONS.SAVE")
+        }}</v-btn>
       </v-card-actions>
     </v-card>
   </div>
@@ -123,7 +161,7 @@ import { computerApi } from "../api/computer_api";
 import { companyApi } from "../api/company_api";
 
 export default {
-  name: "AddElement",
+  name: "AddComputer",
   data: (vm) => ({
     menu: false,
     menu2: false,
@@ -131,10 +169,13 @@ export default {
     companies: [],
     company: {},
     id: 0,
+    formHasErrors: false,
+    name: null,
+    errorMessages: "",
     computer: {
-      name: "",
+      name: null,
       introduced: "",
-      discontinue: "",
+      discontinued: "",
       company: "",
     },
     date: new Date().toISOString().substr(0, 10),
@@ -148,10 +189,7 @@ export default {
 
   props: {},
   methods: {
-    emitCloseAdd: function() {
-      this.$emit("clickCloseAdd", false);
-    },
-    addElement() {
+    addComputer() {
       var company = { id: this.id, name: "" };
       const computer = {
         name: this.computer.name,
@@ -159,7 +197,9 @@ export default {
         discontinued: this.computer.discontinued,
         company: company,
       };
-      computerApi.create(computer);
+      if (this.submit()) {
+        computerApi.create(computer).then(this.emitCloseAdd());
+      }
     },
     findCompanies() {
       var token = sessionStorage.getItem("token");
@@ -167,7 +207,6 @@ export default {
         this.companies = response.data;
       });
     },
-
     formatDate(date) {
       if (!date) return null;
       const [year, month, day] = date.split("-");
@@ -178,8 +217,31 @@ export default {
       const [month, day, year] = date.split("/");
       return `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
     },
-    changeLang(lang) {
-      this.$i18n.locale = lang;
+    emitCloseAdd() {
+      this.$emit("clickCloseAdd", false).then(this.clearFields());
+    },
+    clearFields() {
+      this.computer.name = "";
+      this.id = 0;
+      this.introducedDateFormatted = "";
+      this.discontinuedDateFormatted = "";
+      this.computer.introduced = "";
+      this.computer.discontinued = "";
+    },
+
+    submit() {
+      // this.formHasErrors = false;
+
+      // Object.keys(this.form).forEach((f) => {
+      //   if (!this.form[f]) this.formHasErrors = true;
+      //   this.$refs[f].validate(true);
+      // });
+
+      return (
+        this.computer.name &&
+        this.computer.introduced < this.computer.discontinued &&
+        this.id > 0
+      );
     },
   },
   computed: {
@@ -187,6 +249,19 @@ export default {
       return this.formatDate(this.date);
     },
     options: () => this.name,
+    form() {
+      return {
+        name: this.name,
+        id: this.id,
+        introducedDateFormatted: this.introducedDateFormatted,
+        discontinuedDateFormatted: this.discontinuedDateFormatted,
+      };
+    },
+  },
+  watch: {
+    name() {
+      this.errorMessages = "";
+    },
   },
   mounted() {
     this.findCompanies();

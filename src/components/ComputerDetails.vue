@@ -6,28 +6,29 @@
       </v-expansion-panel-header>
       <v-expansion-panel-content>
         <ul>
-          <li>Introduced : {{computer.introduced}}</li>
-          <li>Discontinued : {{computer.discontinued}}</li>
-          <li>Company : {{computer.company.name}}</li>
+          <li>{{ $t("COMMONS.INTRODUCED") }} {{computer.introduced}}</li>
+          <li>{{ $t("COMMONS.DISCONTINUED") }} {{computer.discontinued}}</li>
+          <li>{{ $t("COMMONS.COMPANY") }} {{computer.company.name}}</li>
         </ul>
         <div class="buttonContainer">
-          <v-btn color="primary" @click="sheet = !sheet" class="bottomButton">Modifier</v-btn>
+          <v-btn color="primary" @click="sheet = !sheet" class="bottomButton">{{ $t("DETAILS.EDIT") }}</v-btn>
           <v-bottom-sheet v-model="sheet">
             <v-sheet class="text-center" height="200px">
-              <v-btn color="red" @click="sheet = !sheet">Close</v-btn>
-              <EditElement style="editelement" />
+              <v-btn color="red" @click="sheet = !sheet">{{ $t("DETAILS.CLOSE") }}</v-btn>
+              <EditComputer style="editelement" />
             </v-sheet>
           </v-bottom-sheet>
-          <v-btn color="error" class="bottomButton" @click="dialog = true">Supprimer</v-btn>
+          <v-btn color="error" class="bottomButton" @click="dialog = true">{{ $t("DETAILS.DELETE") }}</v-btn>
           <v-dialog v-model="dialog" max-width="300">
             <v-card>
-              <v-card-title class="headline">Voulez vous supprimer cet ordinateur ?</v-card-title>
+              <v-card-title class="headline">{{ $t("DETAILS.DELETE-QUESTION") }}</v-card-title>
               <v-card-actions>
                 <v-spacer></v-spacer>
 
-                <v-btn color="error" @click="deleteComputer()">Oui</v-btn>
+                <v-btn color="primary" @click="dialog = false">{{ $t("COMMONS.NO") }}</v-btn>
 
-                <v-btn color="primary" @click="dialog = false">Non</v-btn>
+                <v-btn color="error" @click="deleteComputer(), dialog=false">{{ $t("COMMONS.YES") }}</v-btn>
+
               </v-card-actions>
             </v-card>
           </v-dialog>
@@ -38,8 +39,8 @@
 </template>
 
 <script>
-import EditElement from "./EditElement";
-import { computerApi } from "../api/computer_api";
+import EditComputer from "./EditComputer";
+// import { computerApi } from "../api/computer_api";
 
 export default {
   name: "ComputerDetails",
@@ -47,12 +48,12 @@ export default {
     sheet: false,
     dialog: false
   }),
-  components: { EditElement },
+  components: { EditComputer },
   props: { computer: Object },
   methods: {
     deleteComputer() {
-      computerApi.deleteComputer(this.computer.id);
-      // this.dialog = false;
+      // computerApi.delete(this.computer.id).then(this.$emit("clickRefresh"), this.dialog = false);
+      this.$emit('computerId', this.computer.id);
     },
     editComputer() {
       //TODO Call API

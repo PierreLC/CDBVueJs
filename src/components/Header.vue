@@ -15,11 +15,11 @@
         <div v-if="actualRoute !== 'Authentication'">
           <v-btn outlined color="indigo" dark @click="dialog = !dialog" class="headerButton">
             <v-icon>mdi-plus</v-icon>
-            {{ $t("HEADER.ADD") }}
+            {{ $t("HEADER.ADD-COMPUTER") }}
           </v-btn>
           <v-dialog v-model="dialog" persistent>
             <v-card>
-              <AddElement @clickCloseAdd="emitCloseAdd" />
+              <AddComputer @clickCloseAdd="emitCloseAdd" />
             </v-card>
           </v-dialog>
           <v-btn
@@ -29,7 +29,7 @@
             @click="CompanyModal = !CompanyModal"
             class="headerButton"
           >
-            <v-icon>mdi-plus</v-icon>Add Company
+            <v-icon>mdi-plus</v-icon>{{ $t("HEADER.ADD-COMPANY") }}
           </v-btn>
           <v-dialog v-model="CompanyModal" persistent>
             <v-card>
@@ -68,13 +68,13 @@
         </v-btn>
       </v-col>
     </v-row>
-    <div class="LBC"></div>
+    <div class="roundedDiv"></div>
   </div>
 </template>
 
 <script>
 import AddCompany from "./AddCompany";
-import AddElement from "./AddElement";
+import AddComputer from "./AddComputer";
 
 export default {
   name: "Header",
@@ -88,10 +88,10 @@ export default {
   }),
 
   props: {},
-  components: { AddCompany, AddElement },
+  components: { AddCompany, AddComputer },
   methods: {
-    changeLang(index) {
-      this.locale = this.languages[index].locale;
+    changeLang(lang) {
+      this.$i18n.locale = lang;
     },
     emitBoolClose(value) {
       this.CompanyModal = value;
@@ -141,7 +141,7 @@ export default {
   color: #3b5998;
 }
 
-.LBC {
+.roundedDiv {
   position: absolute;
   background-color: #3b5998;
   left: 0;

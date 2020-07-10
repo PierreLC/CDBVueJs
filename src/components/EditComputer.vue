@@ -1,10 +1,10 @@
 <template>
-  <div>EditElement</div>
+  <div>{{ $t("EDIT.COMPUTER") }}</div>
 </template>
 
 <script>
 export default {
-  name: "EditElement",
+  name: "EditComputer",
   props: {},
   methods: {}
 };
