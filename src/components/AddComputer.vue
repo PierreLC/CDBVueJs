@@ -175,7 +175,7 @@ export default {
     computer: {
       name: null,
       introduced: "",
-      discontinue: "",
+      discontinued: "",
       company: "",
     },
     date: new Date().toISOString().substr(0, 10),
@@ -234,10 +234,10 @@ export default {
       //   if (!this.form[f]) this.formHasErrors = true;
       //   this.$refs[f].validate(true);
       // });
-
+      
       return (
         this.computer.name &&
-        (this.introducedDateFormatted <= this.discontinuedDateFormatted) &&
+        (this.computer.introduced <=  this.computer.discontinued) &&
         (this.id > 0)
       );
     },

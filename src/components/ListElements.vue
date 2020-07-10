@@ -81,7 +81,7 @@
         <div v-for="(element, i) in elements" :key="i">
           <v-row justify="center" align="center" class="checkboxRow">
             <v-checkbox v-model="multiDelete" :value="element.id" v-if="isDeleteRequired"></v-checkbox>
-            <ComputerDetails v-bind:computer="element" @clickRefresh="search" @computerId="deleteComputer"/>
+            <ComputerDetails v-bind:computer="element" @clickRefresh="search" @computerId="deleteComputer($event)"/>
           </v-row>
         </div>
       </div>
@@ -160,8 +160,8 @@ export default {
         this.isButtonClicked = false;
       }
     },
-    deleteComputer(){
-      computerApi.delete(this.$refs.computerId);
+    deleteComputer(computerId){
+      computerApi.delete(computerId);
       this.search();
     },
     searchComputer() {
