@@ -8,7 +8,7 @@
           item-text="name"
           filled
           label="Catégories"
-          @change="changecategorie($event)"
+          @change="changeCategorie($event)"
           v-model="category"
           class="topcardElements"
         ></v-select>
@@ -42,16 +42,42 @@
           color="primary"
           @click="search"
           class="searchButton"
+          :disabled="isButtonClicked"
         >Rechercher ({{numberElement}} Resultats)</v-btn>
-        <v-btn v-else color="primary" @click="search" class="searchButton">Rechercher</v-btn>
+        <v-btn
+          v-else
+          color="primary"
+          @click="search"
+          class="searchButton"
+          :disabled="isButtonClicked"
+        >Rechercher</v-btn>
+        <v-btn
+          small
+          @click="isDeleteRequired = !isDeleteRequired"
+          class="deleteButton"
+          v-if="isUrlInclude('/computers') && category === '0'"
+          :disabled="isButtonClicked"
+        >
+          <v-icon>mdi-delete</v-icon>
+        </v-btn>
       </div>
     </v-card>
 
+    <v-row justify="center" align="center" v-if="isDeleteRequired && isUrlInclude('/computers')">
+      <v-checkbox v-model="isCheckAll" @change="checkAll"></v-checkbox>
+      <v-btn
+        color="error"
+        @click="deleteManyComputer"
+        class="multiDeleteButton"
+        :disabled="isButtonClicked"
+      >Suppression multiple</v-btn>
+    </v-row>
     <v-pagination
       v-model="elementSearch.pageIterator"
       :length="numberPage"
       @input="search()"
       v-if="numberPage && isUrlInclude('/computers') && category === '0'"
+      :disabled="isButtonClicked"
     ></v-pagination>
 
     <div v-if="responceStatus === 200" class="elementsPanel">
@@ -66,13 +92,20 @@
       <div v-else-if="isUrlInclude('/companies')">
         <CompanyDetails v-for="(element, i) in elements" :key="i" v-bind:company="element" />
       </div>
-      <div v-else>Errer rien trouvé</div>
+      <div v-else>Erreur rien trouvé</div>
     </div>
     <div v-else-if="isSearching" class="spinner">
       <v-progress-circular :size="70" :width="7" color="primary" indeterminate></v-progress-circular>
     </div>
     <v-alert v-else-if="isAlertDisplay === true" type="warning" class="alert">Recherche invalide</v-alert>
     <v-alert v-else-if="isErrorAlertDisplay === true" type="error" class="alert">{{messageError}}</v-alert>
+
+    <v-snackbar v-model="snackbar">
+      Erreur de suppression
+      <template v-slot:action="{ attrs }">
+        <v-btn text v-bind="attrs" @click="isSnackbar = false">Ok</v-btn>
+      </template>
+    </v-snackbar>
   </div>
 </template>
 
@@ -95,6 +128,9 @@ export default {
     messageError: "",
     numberElement: 0,
     isDeleteRequired: false,
+    isButtonClicked: false,
+    isCheckAll: false,
+    isSnackbar: false,
     multiDelete: [],
     elementSearch: {
       pageIterator: 1,
@@ -115,6 +151,9 @@ export default {
       this.isSearching = true;
       this.isAlertDisplay = false;
       this.isErrorAlertDisplay = true;
+      this.isButtonClicked = true;
+      this.isDeleteRequired = false;
+      this.multiDelete = [];
       if (this.category == "0") {
         this.searchComputer();
       } else if (this.category == "1") {
@@ -122,46 +161,58 @@ export default {
       } else {
         this.isAlertDisplay = true;
         this.isSearching = false;
+        this.isButtonClicked = false;
       }
     },
     searchComputer() {
-      var token = sessionStorage.getItem("token");
       if (this.elementSearch.taillePage == "") {
         this.elementSearch.taillePage = "20";
       }
       if (this.elementSearch.search == null) {
         this.elementSearch.search = "";
       }
+      if (this.elementSearch.order == undefined) {
+        this.elementSearch.order = "";
+      }
       computerApi
-        .findAll(token, this.elementSearch)
+        .findAll(this.elementSearch)
         .then(responce => {
           this.numberElement = responce.data[0];
           this.elements = responce.data[1];
           this.responceStatus = responce.status;
           this.responceUrl = responce.config.url;
+          this.isButtonClicked = false;
         })
         .catch(error => {
           this.messageError = error;
           this.isErrorAlertDisplay = true;
           this.isSearching = false;
+          this.isButtonClicked = false;
         });
     },
     searchCompany() {
-      var token = sessionStorage.getItem("token");
       companyApi
-        .findAll(token)
+        .findAll()
         .then(responce => {
           this.elements = responce.data;
           this.responceStatus = responce.status;
           this.responceUrl = responce.config.url;
+          this.isButtonClicked = false;
         })
         .catch(error => {
           this.messageError = error;
           this.isErrorAlertDisplay = true;
           this.isSearching = false;
+          this.isButtonClicked = false;
         });
     },
-    changecategorie(event) {
+    deleteManyComputer() {
+      computerApi
+        .deleteMulti(this.multiDelete)
+        .then(this.search())
+        .catch((this.isSnackbar = true));
+    },
+    changeCategorie(event) {
       this.alert = false;
       this.category = event;
       this.sortelement = "";
@@ -171,6 +222,15 @@ export default {
     },
     DefaultPage() {
       this.actualPage = 0;
+    },
+    checkAll() {
+      if (this.isCheckAll) {
+        for (var i = 0; i < this.elements.length; i++) {
+          this.multiDelete.push(this.elements[i].id);
+        }
+      } else {
+        this.multiDelete = [];
+      }
     }
   },
   computed: {
@@ -179,7 +239,6 @@ export default {
         return Math.ceil(this.numberElement / this.elementSearch.taillePage);
       } else {
         this.DefaultPage();
-
         return 0;
       }
     }
@@ -215,6 +274,17 @@ export default {
 
 .searchButton {
   top: 2.5vh;
+}
+
+.deleteButton {
+  top: 2.5vh;
+  background-color: white;
+  float: right;
+}
+
+.multiDeleteButton {
+  transition-duration: 1s;
+  width: 100vh;
 }
 
 .checkboxRow {
