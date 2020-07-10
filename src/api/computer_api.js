@@ -32,6 +32,15 @@ export default class ComputerApi {
     });
   }
 
+  edit(computerDTO) {
+    return this.axios.put("/computers/" + computerDTO.id,computerDTO, {
+    headers: {
+    "Content-Type": "application/json",
+    authorization: "Bearer " + sessionStorage.getItem("token"),
+    },
+    });
+    }
+
   delete(id) {
     return this.axios.delete("/computers/" + id, {
       headers: { authorization: "Bearer " + sessionStorage.getItem("token") },

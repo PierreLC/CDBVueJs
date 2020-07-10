@@ -12,12 +12,11 @@
         </ul>
         <div class="buttonContainer">
           <v-btn color="primary" @click="sheet = !sheet" class="bottomButton">{{ $t("DETAILS.EDIT") }}</v-btn>
-          <v-bottom-sheet v-model="sheet">
-            <v-sheet class="text-center" height="200px">
-              <v-btn color="red" @click="sheet = !sheet">{{ $t("DETAILS.CLOSE") }}</v-btn>
-              <EditComputer style="editelement" />
+          <v-dialog v-model="sheet">
+            <v-sheet class="text-center">
+              <EditComputer style="editelement" v-bind:computerToEdit="computer" @clickCloseEdit="emitCloseEdit"/>
             </v-sheet>
-          </v-bottom-sheet>
+          </v-dialog>
           <v-btn color="error" class="bottomButton" @click="dialog = true">{{ $t("DETAILS.DELETE") }}</v-btn>
           <v-dialog v-model="dialog" max-width="300">
             <v-card>
@@ -40,7 +39,6 @@
 
 <script>
 import EditComputer from "./EditComputer";
-// import { computerApi } from "../api/computer_api";
 
 export default {
   name: "ComputerDetails",
@@ -52,11 +50,10 @@ export default {
   props: { computer: Object },
   methods: {
     deleteComputer() {
-      // computerApi.delete(this.computer.id).then(this.$emit("clickRefresh"), this.dialog = false);
       this.$emit('computerId', this.computer.id);
     },
-    editComputer() {
-      //TODO Call API
+    emitCloseEdit(value){
+      this.sheet=value;
     }
   }
 };
