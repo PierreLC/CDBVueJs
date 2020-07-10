@@ -99,6 +99,13 @@
     </div>
     <v-alert v-else-if="isAlertDisplay === true" type="warning" class="alert">Recherche invalide</v-alert>
     <v-alert v-else-if="isErrorAlertDisplay === true" type="error" class="alert">{{messageError}}</v-alert>
+
+    <v-snackbar v-model="snackbar">
+      Erreur de suppression
+      <template v-slot:action="{ attrs }">
+        <v-btn text v-bind="attrs" @click="isSnackbar = false">Ok</v-btn>
+      </template>
+    </v-snackbar>
   </div>
 </template>
 
@@ -123,6 +130,7 @@ export default {
     isDeleteRequired: false,
     isButtonClicked: false,
     isCheckAll: false,
+    isSnackbar: false,
     multiDelete: [],
     elementSearch: {
       pageIterator: 1,
@@ -200,12 +208,8 @@ export default {
     deleteManyComputer() {
       computerApi
         .deleteMulti(this.multiDelete)
-        .then(responce => {
-          console.log(responce);
-        })
-        .catch(error => {
-          console.log(error);
-        });
+        .then(this.search())
+        .catch((this.isSnackbar = true));
     },
     changeCategorie(event) {
       this.alert = false;
