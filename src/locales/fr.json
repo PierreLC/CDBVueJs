@@ -47,9 +47,9 @@
   },
   "COMMONS": {
     "NAME": "Nom",
-    "INTRODUCED": "Mise sur le marché :",
-    "DISCONTINUED": "Retrait du marché :",
-    "COMPANY": "Société :",
+    "INTRODUCED": "Mise sur le marché",
+    "DISCONTINUED": "Retrait du marché",
+    "COMPANY": "Société",
     "SAVE": "Sauvegarder",
     "NO": "Non",
     "YES": "Oui",
