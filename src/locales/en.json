@@ -47,9 +47,9 @@
   },
   "COMMONS": {
     "NAME": "Name",
-    "INTRODUCED": "Introduced :",
-    "DISCONTINUED": "Discontinued :",
-    "COMPANY": "Company :",
+    "INTRODUCED": "Introduced",
+    "DISCONTINUED": "Discontinued",
+    "COMPANY": "Company",
     "SAVE": "Save",
     "NO": "No",
     "YES": "Yes",
