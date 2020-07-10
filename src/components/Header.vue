@@ -2,41 +2,42 @@
   <div class="mainElement">
     <v-row align="center" justify="center">
       <v-col class="rowDisplayCenter">
-        <router-link to="/Dashboard">
-          <v-btn class="headerButton logoButton"> </v-btn>
+        
+        <router-link to="/Dashboard" v-if="token">
+          <v-btn class="headerButton logoButton"></v-btn>
+        </router-link>
+
+        <router-link to="/" v-else>
+          <v-btn class="headerButton logoButton"></v-btn>
         </router-link>
       </v-col>
 
       <v-col class="rowDisplayCenter">
-        <v-btn
-          outlined
-          color="indigo"
-          dark
-          @click="dialog = !dialog"
-          class="headerButton"
-        >
-          <v-icon>mdi-plus</v-icon>
-          {{ $t("HEADER.ADD") }}
-        </v-btn>
-        <v-dialog v-model="dialog" persistent>
-          <v-card>
-            <AddElement @clickCloseAdd="emitCloseAdd" />
-          </v-card>
-        </v-dialog>
-        <v-btn
-          outlined
-          color="indigo"
-          dark
-          @click="CompanyModal = !CompanyModal"
-          class="headerButton"
-        >
-          <v-icon>mdi-plus</v-icon>Add Company
-        </v-btn>
-        <v-dialog v-model="CompanyModal" persistent>
-          <v-card>
-            <AddCompany @clickeModal="emitBoolClose" />
-          </v-card>
-        </v-dialog>
+        <div v-if="actualRoute !== 'Authentication'">
+          <v-btn outlined color="indigo" dark @click="dialog = !dialog" class="headerButton">
+            <v-icon>mdi-plus</v-icon>
+            {{ $t("HEADER.ADD") }}
+          </v-btn>
+          <v-dialog v-model="dialog" persistent>
+            <v-card>
+              <AddElement @clickCloseAdd="emitCloseAdd" />
+            </v-card>
+          </v-dialog>
+          <v-btn
+            outlined
+            color="indigo"
+            dark
+            @click="CompanyModal = !CompanyModal"
+            class="headerButton"
+          >
+            <v-icon>mdi-plus</v-icon>Add Company
+          </v-btn>
+          <v-dialog v-model="CompanyModal" persistent>
+            <v-card>
+              <AddCompany @clickeModal="emitBoolClose" />
+            </v-card>
+          </v-dialog>
+        </div>
       </v-col>
 
       <v-col class="rowDisplayRight">
@@ -62,7 +63,7 @@
         <v-btn color="headerButton" fab small light>
           <v-icon>mdi-bell</v-icon>
         </v-btn>
-        <router-link to="/Authentication">
+        <router-link to="/">
           <v-btn color="headerButton" fab small light>
             <v-icon>mdi-account</v-icon>
           </v-btn>
@@ -84,6 +85,8 @@ export default {
     CompanyModal: false,
     dialog: false,
     langs: ["fr", "en"],
+    actualRoute: "",
+    token: ""
   }),
 
   props: {},
@@ -97,8 +100,12 @@ export default {
     },
     emitCloseAdd(value) {
       this.dialog = value;
-    },
+    }
   },
+  mounted() {
+    this.actualRoute = this.$router.currentRoute.name;
+    this.token = sessionStorage.getItem("token");
+  }
 };
 </script>
 
